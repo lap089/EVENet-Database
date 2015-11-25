@@ -1,3 +1,4 @@
+/* Authors: Khoi Hoang, Quoc-Lap Trieu */
 /* ADD TABLES */
 
 create database [EVENet]
@@ -10,6 +11,7 @@ create table [User] (
 	password varchar(64) not null,
 	profilePicture varchar(256),
 	registerDate datetime default getdate() not null,
+	userType int not null,
 	primary key(username)
 )
 go
@@ -65,7 +67,7 @@ go
 create table [EventTag]
 (
 	event int not null,
-	tag int not null,
+	tag varchar(32) not null,
 	primary key(Event, Tag)
 )
 go
@@ -80,8 +82,7 @@ go
 
 create table [Tag]
 (
-	id int identity(1, 1) not null,
-	name nvarchar(32) not null,
+	id varchar(32) not null,
 	primary key(id)
 )
 go
@@ -167,9 +168,53 @@ add constraint CST_EventTime check(beginTime < endTime and getdate() <= beginTim
 alter table [Event]
 add constraint CST_TitleLength check(len(title) > 3)
 
-alter table [User]
+alter table [User]				/* UNDER CONSTRUCTION */
 add constraint CST_ValidEmail 
 check(username like '%@%.%' and username not like '%[@,/,\, ]%@.%')
 
+alter table [Individual]
+add constraint CST_ValidDOB
+check (DOB < getdate())
+
 alter table [User]
-drop CST_ValidEmail
+add constraint CST_ValidType
+check (userType = 0 or userType = 1 or userType = 2)
+
+/* ADD STORE PROCEDURES AND FUNCTIONS */
+/*
+Username:
+	Change: password, profilePic
+	Search username
+	Retrieve friendlist
+	Search friends
+	follow someone
+	Retrieve interests
+	Timeline (events posted)
+	Attach interest to users
+Individual:
+	Change: everything
+Organization:
+	Change everything
+Event:
+	Change everything but id, publishDate
+	Retrieve location
+	Retrieve tags
+	Retrieve OP (original poster)
+	Retrieve publishDate
+
+Location:
+	Modify(admin only)
+	Retrieve events
+	Search locations -> [sai] -> saigon
+Tag:
+	Create new tag
+	Search tag->events
+	Attach tags to events
+
+Interest:
+	Change everything but id (Admin only)
+	Search interest [tenn..] -> tennis
+	Retrieve users from interest
+___________________________________________________
+*/
+
