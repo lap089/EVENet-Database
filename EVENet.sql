@@ -9,7 +9,7 @@ create table [User] (
 	username varchar(32) not null,
 	password varchar(64) not null,
 	profilePicture varchar(256),
-	registerDate datetime not null,
+	registerDate datetime default getdate() not null,
 	primary key(username)
 )
 go
@@ -157,3 +157,19 @@ add constraint FK_UserUser_User2 foreign key ([username2])
 references [User]([username])
 
 /* ADD CONSTRAINTS */
+
+alter table [User]
+add constraint CST_Password check(len(password) > 7)
+
+alter table [Event]
+add constraint CST_EventTime check(beginTime < endTime and getdate() <= beginTime)
+
+alter table [Event]
+add constraint CST_TitleLength check(len(title) > 3)
+
+alter table [User]
+add constraint CST_ValidEmail 
+check(username like '%@%.%' and username not like '%[@,/,\, ]%@.%')
+
+alter table [User]
+drop CST_ValidEmail
