@@ -1,111 +1,111 @@
 create database [EVENet]
-GO
+go
 
 use [EVENeT]
-GO
+go
 create table [User]
 (
-	Username varchar(32) not null,
-	Password varchar(64) not null,
-	ProfilePicture varchar(256) not null,
-	RegisterDate datetime,
-	primary key(Username)
+	username varchar(32) not null,
+	password varchar(64) not null,
+	profilePicture varchar(256) not null,
+	registerDate datetime,
+	primary key(username)
 )
-GO
+go
 
 create table [Individual]
 (
-	UserName varchar(32) not null,
-	FirstName nvarchar(16) not null,
-	MidName nvarchar(16),
-	LastName nvarchar(16),
+	username varchar(32) not null,
+	firstName nvarchar(16) not null,
+	midName nvarchar(16),
+	lastName nvarchar(16),
 	DOB date,
-	Gender bit,
-	primary key(Username)
+	gender bit,
+	primary key(username)
 )
-GO
+go
 
 create table [Organization]
 (
-	Username varchar(32) not null,
-	Description nvarchar(1024) not null,
-	Slogan nchar(64),
-	Logo nvarchar(256) not null,
-	Website varchar(256),
-	primary key(Username)
+	username varchar(32) not null,
+	description nvarchar(1024) not null,
+	slogan nchar(64),
+	logo nvarchar(256) not null,
+	website varchar(256),
+	primary key(username)
 )
-GO
+go
 
 create table [Event]
 (
-	BeginTime datetime not null,
-	EndTime datetime not null,
-	Description nvarchar(1024) not null,
-	Title nvarchar(64) not null,
-	ID int not null,
-	Location int not null,
-	Username varchar(32) not null,
-	PublishDate datetime not null,
+	beginTime datetime not null,
+	endTime datetime not null,
+	description nvarchar(1024) not null,
+	title nvarchar(64) not null,
+	id int not null,
+	location int not null,
+	username varchar(32) not null,
+	publishDate datetime not null,
 	primary key(ID)
 )
-GO
+go
 
 create table [Location]
 (
-	ID int not null,
-	Name nvarchar(32),
-	Description nvarchar(1024),
-	Address nvarchar(64) not null,
-	Thumbnail varchar(126)
+	id int not null,
+	name nvarchar(32),
+	description nvarchar(1024),
+	address nvarchar(64) not null,
+	thumbnail varchar(126)
 	primary key(ID)
 )
-GO
+go
 
-create table [Event_Tag]
+create table [EventTag]
 (
-	Event int not null,
-	Tag int not null,
+	event int not null,
+	tag int not null,
 	primary key(Event, Tag)
 )
-GO
+go
 
-create table [User_User]
+create table [UserUser]
 (
-	Username_1 varchar(32) not null,
-	Username_2 varchar(32) not null,
-	primary key(Username_1, Username_2)
+	username1 varchar(32) not null,
+	username2 varchar(32) not null,
+	primary key(username1, Username2)
 )
-GO
+go
 
 create table [Tag]
 (
-	ID int not null,
-	Name nvarchar(32) not null,
-	primary key(ID)
+	id int not null,
+	name nvarchar(32) not null,
+	primary key(id)
 )
-GO
+go
 
 create table [Interest]
 (
-	Name nvarchar(32) not null,
-	ID int not null,
-	Description nvarchar(1024),
-	Thumbnail varchar(256),
-	primary key(ID)
+	name nvarchar(32) not null,
+	id int not null,
+	description nvarchar(1024),
+	thumbnail varchar(256),
+	primary key(id)
 )
-GO
+go
 
-create table [User_Interest]
+create table [UserInterest]
 (
-	Username varchar(32) not null,
-	Interest int,
-	primary key(Username, Interest)
+	username varchar(32) not null,
+	interest int,
+	primary key(username, interest)
 )
-GO
+go
 
 create table [Admin]
 (
-	Username varchar(32)
+	username varchar(32)
 )
-GO
+go
 
