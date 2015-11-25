@@ -1,3 +1,5 @@
+/* ADD TABLES */
+
 create database [EVENet]
 go
 
@@ -109,3 +111,48 @@ create table [Admin]
 )
 go
 
+/* ADD FOREIGN KEYS */
+
+alter table [Individual]
+add constraint FK_Individual_User foreign key ([username])
+references [User](username)
+
+alter table [Organization]
+add constraint FK_Organization_User foreign key ([username])
+references [User](username)
+
+alter table [Admin]
+add constraint FK_Admin_User foreign key ([username])
+references [User](username)
+
+alter table [Event]
+add constraint FK_Event_Location foreign key ([location])
+references [Location](id)
+
+alter table [Event]
+add constraint FK_Event_User foreign key ([username])
+references [User](username)
+
+alter table [EventTag]
+add constraint FK_EventTag_Event foreign key ([event])
+references [Event]([id])
+
+alter table [EventTag]
+add constraint FK_EventTag_Tag foreign key ([tag])
+references [Tag]([id])
+
+alter table [UserInterest]
+add constraint FK_UserInterest_Interest foreign key ([interest])
+references [Interest]([id])
+
+alter table [UserInterest]
+add constraint FK_UserInterest_User foreign key ([username])
+references [User]([username])
+
+alter table [UserUser]
+add constraint FK_UserUser_User1 foreign key ([username1])
+references [User]([username])
+
+alter table [UserUser]
+add constraint FK_UserUser_User2 foreign key ([username2])
+references [User]([username])
