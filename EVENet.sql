@@ -13,7 +13,7 @@ create table [User]
 )
 GO
 
-create table Individual
+create table [Individual]
 (
 	UserName varchar(32) not null,
 	FirstName nvarchar(16) not null,
@@ -25,7 +25,7 @@ create table Individual
 )
 GO
 
-create table Organization
+create table [Organization]
 (
 	Username varchar(32) not null,
 	Description nvarchar(1024) not null,
@@ -50,7 +50,7 @@ create table [Event]
 )
 GO
 
-create table Location
+create table [Location]
 (
 	ID int not null,
 	Name nvarchar(32),
@@ -61,7 +61,7 @@ create table Location
 )
 GO
 
-create table Event_Tag
+create table [Event_Tag]
 (
 	Event int not null,
 	Tag int not null,
@@ -69,7 +69,7 @@ create table Event_Tag
 )
 GO
 
-create table User_User
+create table [User_User]
 (
 	Username_1 varchar(32) not null,
 	Username_2 varchar(32) not null,
@@ -77,7 +77,7 @@ create table User_User
 )
 GO
 
-create table Tag
+create table [Tag]
 (
 	ID int not null,
 	Name nvarchar(32) not null,
@@ -85,7 +85,7 @@ create table Tag
 )
 GO
 
-create table Interest
+create table [Interest]
 (
 	Name nvarchar(32) not null,
 	ID int not null,
@@ -95,7 +95,7 @@ create table Interest
 )
 GO
 
-create table User_Interest
+create table [User_Interest]
 (
 	Username varchar(32) not null,
 	Interest int,
@@ -103,15 +103,9 @@ create table User_Interest
 )
 GO
 
-create table Admin
+create table [Admin]
 (
 	Username varchar(32)
 )
 GO
 
-
-alter table Individual
-add constraint FK_Movies_Genres
-Foreign key (GenreId)
-References Genres (GenreId)
-GO
