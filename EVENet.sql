@@ -5,30 +5,27 @@ go
 
 use [EVENeT]
 go
-create table [User]
-(
+create table [User] (
 	username varchar(32) not null,
 	password varchar(64) not null,
-	profilePicture varchar(256) not null,
-	registerDate datetime,
+	profilePicture varchar(256),
+	registerDate datetime not null,
 	primary key(username)
 )
 go
 
-create table [Individual]
-(
+create table [Individual] (
 	username varchar(32) not null,
 	firstName nvarchar(16) not null,
 	midName nvarchar(16),
-	lastName nvarchar(16),
-	DOB date,
-	gender bit,
+	lastName nvarchar(16) not null,
+	DOB date not null,
+	gender bit not null,
 	primary key(username)
 )
 go
 
-create table [Organization]
-(
+create table [Organization] (
 	username varchar(32) not null,
 	description nvarchar(1024) not null,
 	slogan nchar(64),
@@ -44,7 +41,7 @@ create table [Event]
 	endTime datetime not null,
 	description nvarchar(1024) not null,
 	title nvarchar(64) not null,
-	id int not null,
+	id int identity(1, 1) not null,
 	location int not null,
 	username varchar(32) not null,
 	publishDate datetime not null,
@@ -54,11 +51,13 @@ go
 
 create table [Location]
 (
-	id int not null,
-	name nvarchar(32),
+	id int identity(1, 1) not null,
+	name nvarchar(32) not null,
 	description nvarchar(1024),
 	address nvarchar(64) not null,
-	thumbnail varchar(126)
+	longitude real,
+	latitude real,
+	thumbnail varchar(126),
 	primary key(ID)
 )
 go
@@ -81,7 +80,7 @@ go
 
 create table [Tag]
 (
-	id int not null,
+	id int identity(1, 1) not null,
 	name nvarchar(32) not null,
 	primary key(id)
 )
@@ -90,7 +89,7 @@ go
 create table [Interest]
 (
 	name nvarchar(32) not null,
-	id int not null,
+	id int identity(1, 1) not null,
 	description nvarchar(1024),
 	thumbnail varchar(256),
 	primary key(id)
@@ -156,3 +155,5 @@ references [User]([username])
 alter table [UserUser]
 add constraint FK_UserUser_User2 foreign key ([username2])
 references [User]([username])
+
+/* ADD CONSTRAINTS */
