@@ -46,7 +46,7 @@ create table [Event] (
 	location int not null,
 	username varchar(32) not null,
 	publishDate datetime not null,
-	bit isOpen default 0 not null,
+	isOpen bit default 0 not null,
 	primary key(id)
 )
 go
