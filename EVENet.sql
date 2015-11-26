@@ -1,7 +1,7 @@
 /* Authors: Khoi Hoang, Quoc-Lap Trieu */
 /* ADD TABLES */
 
-create database [EVENet]
+create database EVENet
 go
 
 use [EVENeT]
@@ -37,22 +37,20 @@ create table [Organization] (
 )
 go
 
-create table [Event]
-(
+create table [Event] (
+	id int identity(1, 1) not null,
 	beginTime datetime not null,
 	endTime datetime not null,
 	description nvarchar(1024) not null,
 	title nvarchar(64) not null,
-	id int identity(1, 1) not null,
 	location int not null,
 	username varchar(32) not null,
 	publishDate datetime not null,
-	primary key(ID)
+	primary key(id)
 )
 go
 
-create table [Location]
-(
+create table [Location] (
 	id int identity(1, 1) not null,
 	name nvarchar(32) not null,
 	description nvarchar(1024),
@@ -64,51 +62,55 @@ create table [Location]
 )
 go
 
-create table [EventTag]
-(
+create table [EventTag] (
 	event int not null,
 	tag varchar(32) not null,
 	primary key(Event, Tag)
 )
 go
 
-create table [UserUser]
-(
+create table [UserUser] (
 	username1 varchar(32) not null,
 	username2 varchar(32) not null,
 	primary key(username1, Username2)
 )
 go
 
-create table [Tag]
-(
+create table [Tag] (
 	id varchar(32) not null,
 	primary key(id)
 )
 go
 
-create table [Interest]
-(
-	name nvarchar(32) not null,
+create table [Interest] (
 	id int identity(1, 1) not null,
+	name nvarchar(32) not null,
 	description nvarchar(1024),
 	thumbnail varchar(256),
 	primary key(id)
 )
 go
 
-create table [UserInterest]
-(
+create table [UserInterest] (
 	username varchar(32) not null,
 	interest int,
 	primary key(username, interest)
 )
 go
 
-create table [Admin]
-(
+create table [Admin] (
 	username varchar(32)
 )
+go
+
+create table [UserEvent] (
+	username varchar(32),
+	event int,
+	attend int default 0 not null,
+
+	primary key(username, event)
+)
+
 go
 
 /* ADD FOREIGN KEYS */
@@ -157,28 +159,39 @@ alter table [UserUser]
 add constraint FK_UserUser_User2 foreign key ([username2])
 references [User]([username])
 
+alter table [UserEvent]
+add constraint FK_UserEvent_User foreign key (username)
+references [User](username)
+
+alter table [UserEvent]
+add constraint FK_UserEvent_Event foreign key (event)
+references [Event](id)
 /* ADD CONSTRAINTS */
 
 alter table [User]
 add constraint CST_Password check(len(password) > 7)
 
 alter table [Event]
-add constraint CST_EventTime check(beginTime < endTime and getdate() <= beginTime)
+add constraint CST_Event_Time check(beginTime < endTime and getdate() <= beginTime)
 
 alter table [Event]
-add constraint CST_TitleLength check(len(title) > 3)
+add constraint CST_Title_Length check(len(title) > 3)
 
 alter table [User]				/* UNDER CONSTRUCTION */
-add constraint CST_ValidEmail 
+add constraint CST_Valid_Email 
 check(username like '%@%.%' and username not like '%[@,/,\, ]%@.%')
 
 alter table [Individual]
-add constraint CST_ValidDOB
+add constraint CST_Valid_DOB
 check (DOB < getdate())
 
 alter table [User]
-add constraint CST_ValidType
+add constraint CST_Valid_Type
 check (userType = 0 or userType = 1 or userType = 2)
+
+alter table UserEvent
+add constraint CST_Valid_Status
+check (attend = -1 or attend = 0 or attend = 1)
 
 /* ADD STORE PROCEDURES AND FUNCTIONS */
 /*
