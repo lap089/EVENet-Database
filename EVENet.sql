@@ -46,6 +46,7 @@ create table [Event] (
 	location int not null,
 	username varchar(32) not null,
 	publishDate datetime not null,
+	bit isOpen default 0 not null,
 	primary key(id)
 )
 go
@@ -196,14 +197,15 @@ check (attend = -1 or attend = 0 or attend = 1)
 /* ADD STORE PROCEDURES AND FUNCTIONS */
 /*
 Username:
-	Change: password, profilePic
-	Search username
-	Retrieve friendlist
+	Change: password, 
 	Search friends
 	follow someone
-	Retrieve interests
+	Retrieve interestsprofilePic
+	Search username
+	Retrieve friendlist
 	Timeline (events posted)
 	Attach interest to users
+	get Event that related to user (with status parameter)
 Individual:
 	Change: everything
 Organization:
@@ -214,6 +216,7 @@ Event:
 	Retrieve tags
 	Retrieve OP (original poster)
 	Retrieve publishDate
+	retrieve user who was invited
 
 Location:
 	Modify(admin only)
@@ -229,5 +232,4 @@ Interest:
 	Search interest [tenn..] -> tennis
 	Retrieve users from interest
 ___________________________________________________
-*/
 
