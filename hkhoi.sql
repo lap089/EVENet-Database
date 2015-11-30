@@ -12,6 +12,11 @@
    * collate SQL_Latin1_General_CP1_CS_AS: case sensitive!
    */
 
+   /* ISSUES 
+    * Valid email checking
+	* Password case sensitive comparson
+	*/
+
 /* 0. WARNING: System, Admin uses uses only */
 create proc createRoot
 	@username varchar(32),

@@ -88,11 +88,10 @@ create table [Tag] (
 go
 
 create table [Interest] (
-	id int identity(1, 1) not null,
-	name nvarchar(32) not null,
+	name nvarchar(32),
 	description nvarchar(1024),
 	thumbnail varchar(256),
-	primary key(id)
+	primary key(name)
 )
 go
 
