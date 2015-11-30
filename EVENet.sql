@@ -129,8 +129,8 @@ create table [Photo] (
 create table [Comment] (
 	id int identity(1, 1),
 	content nvarchar(256),
-	event int,
-	authorId varchar(32),
+	eventId int,
+	author varchar(32),
 
 	primary key(id)
 )
@@ -149,16 +149,16 @@ add constraint FK_Admin_User foreign key ([username])
 references [User](username)
 
 alter table [Event]
-add constraint FK_Event_Location foreign key ([location], [username])
-references [Location](id), [User](username)
+add constraint FK_Event_Location foreign key ([location])
+references [Location](id)
 
--- alter table [Event]
--- add constraint FK_Event_User foreign key ([username])
--- references [User](username)
+alter table [Event]
+add constraint FK_Event_User foreign key ([username])
+references [User](username)
 
 alter table [EventTag]
-add constraint FK_EventTag_Event foreign key ([event], [tag])
-references [Event]([id]), [Tag]([id])
+add constraint FK_EventTag_Event foreign key ([event])
+references [Event]([id])
 
 alter table [EventTag]
 add constraint FK_EventTag_Tag foreign key ([tag])
@@ -196,9 +196,13 @@ alter table [Organization]
 add constraint FK_Organization_Type
 foreign key ([type]) references [Type](name)
 
-aler table [Comment]
+alter table [Comment]
 add constraint FK_Comment_Event
-foreign key (eventId, author) references [Event](id), [User](username)
+foreign key (eventId) references [Event](id)
+
+alter table [Comment]
+add constraint FK_Comment_Author
+foreign key (author) references [User]([username])
 
 /* ADD CONSTRAINTS */
 
