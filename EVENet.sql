@@ -9,7 +9,7 @@ go
 create table [User] (
 	username varchar(32) not null,
 	password varchar(64) not null,
-	profilePicture varchar(256),
+	profilePicture image,
 	registerDate datetime default getdate() not null,
 	userType int not null,
 	primary key(username)
@@ -30,12 +30,17 @@ go
 create table [Organization] (
 	username varchar(32) not null,
 	description nvarchar(1024) not null,
-	slogan nchar(64),
-	logo nvarchar(256) not null,
+	[type] nvarchar(32) not null,
+	[phone] varchar(16),
 	website varchar(256),
 	primary key(username)
 )
 go
+
+create table [Type] (
+	name nvarchar(32),
+	primary key (name)
+)
 
 create table [Event] (
 	id int identity(1, 1) not null,
@@ -46,7 +51,6 @@ create table [Event] (
 	location int not null,
 	username varchar(32) not null,
 	publishDate datetime not null,
-	isOpen bit default 0 not null,
 	primary key(id)
 )
 go
@@ -58,7 +62,7 @@ create table [Location] (
 	address nvarchar(64) not null,
 	longitude real,
 	latitude real,
-	thumbnail varchar(126),
+	thumbnail image,
 	primary key(ID)
 )
 go
@@ -114,6 +118,22 @@ create table [UserEvent] (
 
 go
 
+create table [Photo] (
+	eventId int not null,
+	[order] int not null,
+	data image not null,
+
+	primary key (eventId, [order])
+)
+
+create table [Comment] (
+	id int identity(1, 1),
+	content nvarchar(256),
+	event int,
+	authorId varchar(32),
+
+	primary key(id)
+)
 /* ADD FOREIGN KEYS */
 
 alter table [Individual]
@@ -129,16 +149,16 @@ add constraint FK_Admin_User foreign key ([username])
 references [User](username)
 
 alter table [Event]
-add constraint FK_Event_Location foreign key ([location])
-references [Location](id)
+add constraint FK_Event_Location foreign key ([location], [username])
+references [Location](id), [User](username)
 
-alter table [Event]
-add constraint FK_Event_User foreign key ([username])
-references [User](username)
+-- alter table [Event]
+-- add constraint FK_Event_User foreign key ([username])
+-- references [User](username)
 
 alter table [EventTag]
-add constraint FK_EventTag_Event foreign key ([event])
-references [Event]([id])
+add constraint FK_EventTag_Event foreign key ([event], [tag])
+references [Event]([id]), [Tag]([id])
 
 alter table [EventTag]
 add constraint FK_EventTag_Tag foreign key ([tag])
@@ -150,7 +170,7 @@ references [Interest]([id])
 
 alter table [UserInterest]
 add constraint FK_UserInterest_User foreign key ([username])
-references [User]([username])
+references [Individual]([username])
 
 alter table [UserUser]
 add constraint FK_UserUser_User1 foreign key ([username1])
@@ -167,6 +187,19 @@ references [User](username)
 alter table [UserEvent]
 add constraint FK_UserEvent_Event foreign key (event)
 references [Event](id)
+
+alter table [Photo]
+add constraint FK_Photo_Event
+foreign key (eventId) references [Event](id)
+
+alter table [Organization]
+add constraint FK_Organization_Type
+foreign key ([type]) references [Type](name)
+
+aler table [Comment]
+add constraint FK_Comment_Event
+foreign key (eventId, author) references [Event](id), [User](username)
+
 /* ADD CONSTRAINTS */
 
 alter table [User]
@@ -193,43 +226,3 @@ check (userType = 0 or userType = 1 or userType = 2)
 alter table UserEvent
 add constraint CST_Valid_Status
 check (attend = -1 or attend = 0 or attend = 1)
-
-/* ADD STORE PROCEDURES AND FUNCTIONS */
-/*
-Username:
-	Change: password, 
-	Search friends
-	follow someone
-	Retrieve interestsprofilePic
-	Search username
-	Retrieve friendlist
-	Timeline (events posted)
-	Attach interest to users
-	get Event that related to user (with status parameter)
-Individual:
-	Change: everything
-Organization:
-	Change everything
-Event:
-	Change everything but id, publishDate
-	Retrieve location
-	Retrieve tags
-	Retrieve OP (original poster)
-	Retrieve publishDate
-	retrieve user who was invited
-
-Location:
-	Modify(admin only)
-	Retrieve events
-	Search locations -> [sai] -> saigon
-Tag:
-	Create new tag
-	Search tag->events
-	Attach tags to events
-
-Interest:
-	Change everything but id (Admin only)
-	Search interest [tenn..] -> tennis
-	Retrieve users from interest
-___________________________________________________
-
