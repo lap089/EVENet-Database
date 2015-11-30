@@ -96,7 +96,7 @@ create table [Interest] (
 )
 go
 
-create table [UserInterest] (
+create table [IndividualInterest] (
 	username varchar(32) not null,
 	interest int,
 	primary key(username, interest)
@@ -108,7 +108,7 @@ create table [Admin] (
 )
 go
 
-create table [UserEvent] (
+create table [UserEventAttendants] (
 	username varchar(32),
 	event int,
 	attend int default 0 not null,
@@ -164,12 +164,12 @@ alter table [EventTag]
 add constraint FK_EventTag_Tag foreign key ([tag])
 references [Tag]([id])
 
-alter table [UserInterest]
-add constraint FK_UserInterest_Interest foreign key ([interest])
+alter table [IndividualInterest]
+add constraint FK_IndividualInterest_Interest foreign key ([interest])
 references [Interest]([id])
 
-alter table [UserInterest]
-add constraint FK_UserInterest_User foreign key ([username])
+alter table [IndividualInterest]
+add constraint FK_IndividualInterest_User foreign key ([username])
 references [Individual]([username])
 
 alter table [UserUser]
@@ -180,12 +180,12 @@ alter table [UserUser]
 add constraint FK_UserUser_User2 foreign key ([username2])
 references [User]([username])
 
-alter table [UserEvent]
-add constraint FK_UserEvent_User foreign key (username)
+alter table [UserEventAttendants]
+add constraint FK_UserEventAttendants_User foreign key (username)
 references [User](username)
 
-alter table [UserEvent]
-add constraint FK_UserEvent_Event foreign key (event)
+alter table [UserEventAttendants]
+add constraint FK_UserEventAttendants_Event foreign key (event)
 references [Event](id)
 
 alter table [Photo]
@@ -227,6 +227,6 @@ alter table [User]
 add constraint CST_Valid_Type
 check (userType = 0 or userType = 1 or userType = 2)
 
-alter table UserEvent
+alter table UserEventAttendants
 add constraint CST_Valid_Status
 check (attend = -1 or attend = 0 or attend = 1)
