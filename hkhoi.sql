@@ -34,7 +34,8 @@ as begin
 	insert into [Admin] values (@username)
 end
 go
-/* Check if a user is an admin */
+
+/* 0.2 Check if a user is an admin */
 create function isAdmin(@username varchar(32))
 	returns bit
 as begin
@@ -45,6 +46,21 @@ as begin
 	return 0
 end
 go
+
+/* 0.3 Create location */
+create proc createLocation
+	@name nvarchar(32),
+	@description ntext,
+	@address nvarchar(64),
+	@long real,
+	@lat real,
+	@thumbnail image
+as begin
+	insert into [Location] (name, description, address, longitude, latitude, thumbnail) values
+	(@name, @description, @address, @long, @lat, @thumbnail)
+end
+go
+/* END ADMIN SECTOR */
 
 /* 1. ORGANIZATION TYPE SECTOR */
 /* 1.1 Create a new organization sector */
@@ -130,7 +146,7 @@ create proc createOrganization
 	@password varchar(64),
 	@profilePicture image,
 
-	@description text,
+	@description ntext,
 	@type nvarchar(32),
 	@phone varchar(16),
 	@website varchar(256)
@@ -214,5 +230,19 @@ as begin
 		return 1
 	end
 	return 0
+end
+go
+
+/* 2.11 Create an event */
+create proc createEvent
+	@beginTime datetime,
+	@endTime datetime,
+	@description ntext,
+	@title nvarchar(128),
+	@location int,
+	@currentUser varchar(32)
+as begin
+	insert into [Event] values
+	(@beginTime, @endTime, @description, @title, @location, @currentUser, null)
 end
 go
