@@ -128,7 +128,7 @@ create table [Photo] (
 
 create table [Comment] (
 	id int identity(1, 1),
-	content ntext,
+	content ntext not null,
 	eventId int,
 	author varchar(32),
 

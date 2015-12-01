@@ -1,6 +1,7 @@
 /* NOTE:
  * userType: 0: Admin, 1: Individual, 2: Organization
  * gender: 0: Female, 1: Male
+ * attendance: -1: No, 0: Maybe, 1: Yes
  */
 
  /* ERRORS:
@@ -258,8 +259,34 @@ end
 go
 
 /* 2.12.1 Host invites someone : Please remember the notification! */
+create proc invite 
+	@eventId int,
+	@username varchar(32) 
+as begin
+	insert into [UserEventAttendants] values
+	(@username, @eventId, 0)
+end
+go
 
-/* 2.12.2 Cancel an invitation */
+/* 2.12.2 disinvite an user */
+create proc disinvite 
+	@eventId int,
+	@username varchar(32) 
+as begin
+	delete from [UserEventAttendants]
+	where event = @eventId and username = @username
+end
+go
+
+/* 2.12.3 List all invited people with parameter -1, 0, 1 */
+create proc listInvitedPeople
+	@eventId int
+as begin
+	select *
+	from [UserEventAttendants] att join [User] pro on att.username = pro.username
+	where att.event = @eventId
+end
+go
 
 /* 2.13 User add comment */
 
