@@ -6,6 +6,7 @@
  /* ERRORS:
   * createUser: No permission 18, 0 -> occurs when an user tries to create an admin
   * createType: No permission 18, 1 -> occurs when an user tries to create an organization type
+  * 
   */
 
   /* PERSONAL NOTE:
@@ -14,10 +15,11 @@
 
    /* ISSUES 
     * Valid email checking
-	* Password case sensitive comparson
+	* Password case sensitive comparison
 	*/
 
-/* 0. WARNING: System, Admin uses uses only */
+/* 0. ADMIN SECTOR */
+/* 0.1 Create a root user (admin) */
 create proc createRoot
 	@username varchar(32),
 	@password varchar(64),
@@ -28,7 +30,7 @@ as begin
 	insert into [Admin] values (@username)
 end
 go
-
+/* Check if a user is an admin */
 create function isAdmin(@username varchar(32))
 	returns bit
 as begin
@@ -40,7 +42,8 @@ as begin
 end
 go
 
-/* 2. Organization Type */
+/* 1. ORGANIZATION TYPE SECTOR */
+/* 1.1 Create a new organization sector */
 create proc createType @name nvarchar(32), @currentUser varchar(32) as begin
 	if ([dbo].isAdmin(@currentUser) = 1) begin
 		insert into [Type] values (@name)
@@ -50,17 +53,28 @@ create proc createType @name nvarchar(32), @currentUser varchar(32) as begin
 end
 go
 
-create function isTypeExisted(@name nvarchar(32))
+/* 1.2 Check is an organization type is existed */
+create function isTypeExisted(@name varchar(32))
 	returns bit
 as begin
-	if exists (select * from [Type] where name = @name) begin
+	if exists (select * from [User] where username = @name) begin
 		return 1
 	end
 	return 0
 end
 go
-
-/* 1. Create a new user - Guest */
+/* 2. USERS SECTOR */
+/* 2.0 Check if an user is existed */
+create function isUserExisted(@username varchar(32)) 
+	returns bit
+as begin
+	if exists (select * from [dbo].[User] where [username] = @username) begin
+		return 1
+	end
+	return 0
+end
+go
+/* 2.1 Create a base user */
 create proc createUser
 	@username varchar(32),
 	@password varchar(64),
@@ -76,6 +90,7 @@ as begin
 end
 go
 
+/* 2.2 Check if users' aunthentication is valid */
 create function [auth](@username varchar(32), @password varchar(64))
 	returns bit
 as begin
@@ -86,7 +101,7 @@ as begin
 	return 0
 end
 go
-/* Support 1.1 */
+/* 2.3 Create an individual */
 create proc createIndividual
 	@username varchar(32),
 	@password varchar(64),
@@ -105,7 +120,7 @@ as begin
 end
 go
 
-/* Support 1.2 */
+/* 2.4 Create an organization */
 create proc createOrganization
 	@username varchar(32),
 	@password varchar(64),
@@ -126,6 +141,8 @@ as begin
 end
 go
 
+/* 2.5 Allows users to set profile pictures */
+
 create proc setProfilePicture
 	@username varchar(32), 
 	@image image 
@@ -136,6 +153,7 @@ as begin
 end
 go
 
+/* 2.6 Allows users to set new password */
 create proc setPassword
 	@username varchar(32),
 	@oldPassword varchar(64),
@@ -150,6 +168,13 @@ as begin
 		raiserror('Wrong old password!', 18, 3)
 	end
 end
-/* TESTING AREA */
+go
 
-exec setPassword 'hkhoi@apcs.vn', 'HOANGKHOI', 'hoangkhoi'
+/* FRIEND ZONE =)) */
+
+/* 2.7 Follow a friend */
+create proc follow(@this varchar(32), @friend varchar(32)) as begin
+	insert into [UserUser] values
+	(@this, @friend)
+end
+go

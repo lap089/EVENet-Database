@@ -97,13 +97,14 @@ go
 
 create table [IndividualInterest] (
 	username varchar(32) not null,
-	interest int,
+	interest nvarchar(32),
 	primary key(username, interest)
 )
 go
 
 create table [Admin] (
-	username varchar(32)
+	username varchar(32),
+	primary key (username)
 )
 go
 
@@ -165,7 +166,7 @@ references [Tag]([id])
 
 alter table [IndividualInterest]
 add constraint FK_IndividualInterest_Interest foreign key ([interest])
-references [Interest]([id])
+references [Interest]([name])
 
 alter table [IndividualInterest]
 add constraint FK_IndividualInterest_User foreign key ([username])
@@ -229,3 +230,7 @@ check (userType = 0 or userType = 1 or userType = 2)
 alter table UserEventAttendants
 add constraint CST_Valid_Status
 check (attend = -1 or attend = 0 or attend = 1)
+
+alter table [UserUser]
+add constraint CST_Valid_Follow
+check (username1 != username2)
