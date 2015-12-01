@@ -83,7 +83,7 @@ as begin
 	return 0
 end
 go
-/* 2. USERS SECTOR */
+/* 2. CORE SECTOR */
 /* 2.0 Check if an user is existed */
 create function isUserExisted(@username varchar(32)) 
 	returns bit
@@ -246,3 +246,36 @@ as begin
 	(@beginTime, @endTime, @description, @title, @location, @currentUser, null)
 end
 go
+/* 2.12 Edit event location */
+create proc editLocation
+	@eventId int,
+	@newLocation int
+as begin
+	update [Event]
+	set location = @newLocation
+	where id = @eventId
+end
+go
+
+/* 2.12.1 Host invites someone : Please remember the notification! */
+
+/* 2.12.2 Cancel an invitation */
+
+/* 2.13 User add comment */
+
+/* 2.14 Get comments from a post */
+
+/* 2.15 Delete a comment : host or author or admin */
+
+/* 2.16 Attach tags */
+
+/* Detach tag */
+
+/* Events sectors */
+/* 3.1 Search events by tags */
+
+
+/* Users sectors */
+/* 4.1 Search users by interest */
+
+/* 4.2 Respond to an invitation */
