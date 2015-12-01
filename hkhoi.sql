@@ -352,10 +352,52 @@ as begin
 	end
 end
 go
-/* 2.16 Attach tags */
 
+/* TAGS SECTOR */
 
-/* Detach tag */
+/* 3.0 Check the availability of a tag */
+create function isTagExisted(@tagName varchar(32))
+	returns bit
+as begin
+	if exists (select * from [Tag] where id = @tagName) begin
+		return 1
+	end
+	return 0
+end
+go
+
+/* 3.0.1 Create a new tag */
+create proc createTag
+	@tagName varchar(32)
+as begin
+	insert into [Tag] (id, occurrence) values
+	(@tagName, 0)
+end
+go
+
+/* 3.0.2 Tags' occurence increment */
+create proc increaseTagOccurence
+	@tagName varchar(32)
+as begin
+	declare @cur int = (select occurrence from [Tag] where id = @tagName)
+	update [Tag]
+	set occurrence = @cur + 1
+	where id = @tagName
+end
+go
+
+/* 3.0.3 Search tags */
+
+/* 1.1 Attach tags */
+create proc attachTag
+	@tag varchar(32),
+	@eventId int
+as begin
+		
+end
+go
+
+/* 1.2 Detach tag */
 
 /* Events sectors */
 /* 3.1 Search events by tags */
@@ -365,6 +407,3 @@ go
 /* 4.1 Search users by interest */
 
 /* 4.2 Respond to an invitation */
-
-/* TAGS SECTOR */
-/* 5. 1 Create a tag */
