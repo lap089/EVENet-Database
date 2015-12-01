@@ -83,6 +83,7 @@ go
 
 create table [Tag] (
 	id varchar(32) not null,
+	occurrence int default 1 not null,
 	primary key(id)
 )
 go

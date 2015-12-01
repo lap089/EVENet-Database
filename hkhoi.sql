@@ -4,10 +4,14 @@
  * attendance: -1: No, 0: Maybe, 1: Yes
  */
 
- /* ERRORS:
+ /* ERRORS & EXCEPTION:
   * createUser: No permission 18, 0 -> occurs when an user tries to create an admin
   * createType: No permission 18, 1 -> occurs when an user tries to create an organization type
-  * 
+  * createOrganization: Type not found 18, 2 -> occurs when organizations choose
+  *						a type which is not existed.
+  * setPassword: 18, 3: Wrong old password -> occurs when users input wrong old password but still can be
+  *						able to change password.
+  * deleteComment 18, 4: Remove a comment without authority
   */
 
   /* PERSONAL NOTE:
@@ -289,12 +293,67 @@ end
 go
 
 /* 2.13 User add comment */
+create proc addComennt
+	@eventId int,
+	@author varchar(32),
+	@content ntext
+as begin
+	insert into [Comment] (eventId, author, content) values
+	(@eventId, @author, @content)
+end
+go
 
 /* 2.14 Get comments from a post */
+create proc getComments
+	@eventId int
+as begin
+	select content, eventId, author
+	from Comment
+	where eventId = @eventId
+end
+go
+
+/* 2.14.1 Check if an user is the author of a comment */
+create function isCommentAuthor(@username varchar(32), @commentId int)
+	returns bit
+as begin
+	if exists (select * from Comment where id = @commentId and author = @username) begin
+		return 1
+	end
+	return 0
+end
+go
+
+/* 2.14.2 Check if an user is an event host */
+create function isHost(@username varchar(32), @eventId int)
+	returns bit
+as begin
+	if exists (select * from [Event] where username = @username and id = @eventId) begin
+		return 1
+	end
+	return 0
+end
+go
 
 /* 2.15 Delete a comment : host or author or admin */
-
+create proc deleteComment
+	@currentUser varchar(32),
+	@commentId int
+as begin
+	declare @eventId int = (select id from Comment where id = @commentId)
+	if dbo.isAdmin(@currentUser) = 1 
+		or dbo.isCommentAuthor(@currentUser, @commentId) = 1 
+		or dbo.isHost(@currentUser, @eventId) = 1 begin
+		
+		delete from [Comment]
+		where id = @commentId
+	end else begin
+		raiserror('No permission', 18, 4);
+	end
+end
+go
 /* 2.16 Attach tags */
+
 
 /* Detach tag */
 
@@ -306,3 +365,6 @@ go
 /* 4.1 Search users by interest */
 
 /* 4.2 Respond to an invitation */
+
+/* TAGS SECTOR */
+/* 5. 1 Create a tag */
