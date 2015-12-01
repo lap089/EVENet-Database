@@ -18,7 +18,11 @@
 	* Password case sensitive comparison
 	*/
 
+	use [EVENet]
+	go
+
 /* 0. ADMIN SECTOR */
+
 /* 0.1 Create a root user (admin) */
 create proc createRoot
 	@username varchar(32),
@@ -176,5 +180,39 @@ go
 create proc follow(@this varchar(32), @friend varchar(32)) as begin
 	insert into [UserUser] values
 	(@this, @friend)
+end
+go
+
+/* 2.8 Unfollow a friend */
+create proc unfollow @this varchar(32), @friend varchar(32) as begin
+	delete from [UserUser]
+	where username1 = @this and username2 = @friend
+end
+go
+
+/* 2.9 List all following accounts from an user */
+create proc followingList @this varchar(32) as begin
+	select pro.username, pro.profilePicture, pro.userType
+	from UserUser rel join [User] pro on rel.username2 = pro.username
+	where username1 = @this
+end
+go
+
+/* 2.9.1 List all follower from an user */
+create proc followerList @this varchar(32) as begin
+	select pro.username, pro.profilePicture, pro.userType
+	from UserUSer rel join [User] pro on rel.username1 = pro.username
+	where username2 = @this
+end
+go
+
+/* 2.10 Check if a person is following another  */
+create function isFollowing(@this varchar(32), @that varchar(32))
+	returns bit
+as begin
+	if exists (select * from UserUser where username1 = @this and username2 = @that) begin
+		return 1
+	end
+	return 0
 end
 go
