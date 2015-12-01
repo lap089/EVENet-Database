@@ -130,7 +130,7 @@ create proc createOrganization
 	@password varchar(64),
 	@profilePicture image,
 
-	@description nvarchar(1024),
+	@description text,
 	@type nvarchar(32),
 	@phone varchar(16),
 	@website varchar(256)

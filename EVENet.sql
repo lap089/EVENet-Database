@@ -29,7 +29,7 @@ go
 
 create table [Organization] (
 	username varchar(32) not null,
-	description nvarchar(1024) not null,
+	description text not null,
 	[type] nvarchar(32) not null,
 	[phone] varchar(16),
 	website varchar(256),
@@ -46,8 +46,8 @@ create table [Event] (
 	id int identity(1, 1) not null,
 	beginTime datetime not null,
 	endTime datetime not null,
-	description nvarchar(1024) not null,
-	title nvarchar(64) not null,
+	description text not null,
+	title nvarchar(128) not null,
 	location int not null,
 	username varchar(32) not null,
 	publishDate datetime not null,
@@ -58,7 +58,7 @@ go
 create table [Location] (
 	id int identity(1, 1) not null,
 	name nvarchar(32) not null,
-	description nvarchar(1024),
+	description text,
 	address nvarchar(64) not null,
 	longitude real,
 	latitude real,
@@ -89,7 +89,7 @@ go
 
 create table [Interest] (
 	name nvarchar(32),
-	description nvarchar(1024),
+	description text,
 	thumbnail varchar(256),
 	primary key(name)
 )
@@ -128,7 +128,7 @@ create table [Photo] (
 
 create table [Comment] (
 	id int identity(1, 1),
-	content nvarchar(256),
+	content text,
 	eventId int,
 	author varchar(32),
 
