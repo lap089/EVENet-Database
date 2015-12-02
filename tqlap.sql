@@ -3,13 +3,23 @@ use[EVENet]
 go
 
 
+/* ERRORS & EXCEPTION:
+  * createInterest, deleteInterest: No permission 10, 0 -> occurs when an user tries to create/delete an Interest
+  * deleteEvent, setEvent: No permission 10, 1 -> occurs when an user tries to delete/set an event
+  */
+
+
 /*Create an interest (Admin only)*/
 create procedure createInterest
- @name nvarchar(32), @description ntext, @thumbnail image
+ @name nvarchar(32), @description nvarchar(1024), @thumbnail image
  as
  begin
+	if(dbo.isAdmin(@name) = 1)
+	begin
 	insert into [Interest]
 	values(@name, @description, @thumbnail)
+	end
+	else raiserror('Only admin can edit',10,0)
  end
 go
 
@@ -30,31 +40,35 @@ create procedure deleteInterest
 @name nvarchar(32)
 as
 begin
+	if (dbo.isAdmin(@name) = 1)
+	begin
 	delete from [Interest]
 	where name = @name
+	end
+	else raiserror('Only admin can edit',10,0)
 end
 go
 
 
 
---create procedure searchInterestFromName
---@name nvarchar(32)
--- as
--- begin
---	select * from Interest
---	where name like '%'+@name+'%'
--- end
---go
+create procedure searchInterestFromName
+@name nvarchar(32)
+ as
+ begin
+	select * from Interest
+	where name like '%'+@name+'%'
+ end
+go
 
 
---create procedure searchUserFromInterest
---@name nvarchar(32)
--- as
--- begin
---	select u.* from UserInterest ui, [User] u 
---	where u.username = ui.username and ui.interest = @name
--- end
---go
+create procedure searchUserFromInterest
+@interest nvarchar(32)
+ as
+ begin
+	select u.* from  [IndividualInterest] indin, [User] u 
+	where u.username = indin.username and  indin.interest = @interest
+ end
+go
 
 
 
@@ -64,7 +78,7 @@ create procedure deleteEvent
 as
 begin
 	if (dbo.isHost(@username,@id) = 0 and dbo.isAdmin(@username) = 0 )
-	raiserror('Only author or admin can edit',10,0)
+	raiserror('Only author or admin can edit',10,1)
 	else
 	delete from [Event] where id = @id
 end
@@ -75,12 +89,12 @@ go
 /*Change an Event (must pass an username to check if it is author or admin)*/
 create procedure setEvent
 @id int, @username nvarchar(32), @begintime datetime,
- @endtime datetime, @description ntext, @title nvarchar(128),   
+ @endtime datetime, @description nvarchar(1024), @title nvarchar(128),   
  @location int
  as
  begin
 	if( dbo.isHost(@username,@id) = 0 and dbo.isAdmin(@username) =0)
-	raiserror('Only author or admin can edit',10,0)
+	raiserror('Only author or admin can edit',10,1)
 	else
 	update [Event]
 	set beginTime = @begintime, endTime = @endtime, description = @description,title =@title, location = @location
@@ -90,78 +104,3 @@ create procedure setEvent
 
 
 
-
---create procedure getTag
--- @name varchar(32)
--- as
--- begin
---	select * from Tag
---	where id = @name
--- end
---go
-
---create procedure createTag
--- @name varchar(32)
--- as 
--- begin
---	insert into Tag
---	values(@name)
--- end
---go
-
-
---create procedure addTagToEvent
--- @tag varchar(32), @event int
--- as 
--- begin
---	insert into EventTag
---	values(@event,@tag)
--- end
---go
-
-
---create procedure isTagExist
---@tag varchar(32)
---as
---begin
---	return (select count(*) from Tag where id = @tag)
---end
---go
-
---create procedure searchEventFromTag
---@tag varchar(32)
---as
---begin
---	select e.* from EventTag et, [Event] e where et.tag= @tag and e.id = et.event 
---end
---go
-
-
-
-
-
--- Check functions:
-
-/* Check if a user is an admin */
-create function isAdmin(@username varchar(32))
-	returns bit
-as begin
-	
-	if exists (select * from [Admin] where username = @username) begin
-		return 1
-	end
-	return 0
-end
-go
-
-
-/*  Check if an user is an event host */
-create function isHost(@username varchar(32), @eventId int)
-	returns bit
-as begin
-	if exists (select * from [Event] where username = @username and id = @eventId) begin
-		return 1
-	end
-	return 0
-end
-go
