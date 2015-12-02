@@ -136,6 +136,19 @@ create table [Comment] (
 
 	primary key(id)
 )
+
+
+create table [Notification](
+	id int identity(1,1),
+	receiver varchar(32),
+	sender varchar(32),
+	eventId int,
+	typeInfo int,
+	Seen bit default 0,
+	timeSent datetime default getdate(),
+	primary key(id)
+)
+
 /* ADD FOREIGN KEYS */
 
 alter table [Individual]
@@ -240,6 +253,13 @@ check (username1 != username2)
 alter table [Tag]
 add constraint CST_No_Space
 check (id not like '% %')
+
+
+
+alter table [Notification]
+add constraint CST_Reciever_Sender
+check (reciever not like sender)
+
 
 
 go
