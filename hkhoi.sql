@@ -386,6 +386,17 @@ as begin
 end
 go
 
+/* 3.0.2.1 Decrease tags' occurence */
+create proc decreaseTagOccurence
+	@tagName varchar(32)
+as begin
+	declare @cur int = (select occurrence from [Tag] where id = @tagName)
+	update [Tag]
+	set occurrence = @cur - 1
+	where id = @tagName
+end
+go
+
 /* 3.0.3 Search tags */
 
 /* 1.1 Attach tags */
@@ -393,15 +404,33 @@ create proc attachTag
 	@tag varchar(32),
 	@eventId int
 as begin
-		
+	insert into [EventTag] values
+	(@eventId, @tag)
+	exec increaseTagOccurence @tag
 end
 go
 
 /* 1.2 Detach tag */
-
-/* Events sectors */
-/* 3.1 Search events by tags */
-
+create proc detachTag
+	@tag varchar(32),
+	@eventId int
+as begin
+	delete from [EventTag]
+	where event = @eventId and tag = @tag
+	exec decreaseTagOccurence @tag
+end
+go
+/* EVENTS SECTOR */
+/* 3.1 Search events by tags (get top n) */
+create proc searchTopTags
+	@tagName varchar(32),
+	@n int
+as begin
+	select * from Tag
+	where id like '%' + @tagName + '%'
+	order by occurrence desc
+end
+go
 
 /* Users sectors */
 /* 4.1 Search users by interest */
