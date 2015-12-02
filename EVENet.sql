@@ -47,6 +47,7 @@ create table [Event] (
 	beginTime datetime not null,
 	endTime datetime not null,
 	description nvarchar(1024) not null,
+	thumbnail image,
 	title nvarchar(128) not null,
 	location int not null,
 	username varchar(32) not null,
@@ -239,3 +240,20 @@ check (username1 != username2)
 alter table [Tag]
 add constraint CST_No_Space
 check (id not like '% %')
+
+
+go
+create trigger userInviteHimself
+on [UserEventAttendants]
+for insert, update
+as
+begin
+	declare @username nvarchar(32) , @event int
+	select @username = username, @event = event from inserted
+	 if exists (select * from [Event] e, [UserEventAttendants] uea where e.username = uea.username and e.id = uea.event)
+		begin
+		raiserror('User cannot invite himself',10,3)
+		rollback
+		end
+end
+go

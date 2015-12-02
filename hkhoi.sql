@@ -52,10 +52,12 @@ as begin
 end
 go
 
+
+
 /* 0.3 Create location */
 create proc createLocation
 	@name nvarchar(32),
-	@description ntext,
+	@description nvarchar(1024),
 	@address nvarchar(64),
 	@long real,
 	@lat real,
@@ -151,7 +153,7 @@ create proc createOrganization
 	@password varchar(64),
 	@profilePicture image,
 
-	@description ntext,
+	@description nvarchar(1024),
 	@type nvarchar(32),
 	@phone varchar(16),
 	@website varchar(256)
@@ -242,13 +244,14 @@ go
 create proc createEvent
 	@beginTime datetime,
 	@endTime datetime,
-	@description ntext,
+	@description nvarchar(1024),
+	@thumbnail image,
 	@title nvarchar(128),
 	@location int,
 	@currentUser varchar(32)
 as begin
 	insert into [Event] values
-	(@beginTime, @endTime, @description, @title, @location, @currentUser, null)
+	(@beginTime, @endTime, @description,@thumbnail, @title, @location, @currentUser, null)
 end
 go
 /* 2.12 Edit event location */
@@ -308,7 +311,7 @@ go
 create proc addComennt
 	@eventId int,
 	@author varchar(32),
-	@content ntext
+	@content nvarchar(1024)
 as begin
 	insert into [Comment] (eventId, author, content) values
 	(@eventId, @author, @content)
