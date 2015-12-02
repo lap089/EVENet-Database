@@ -91,7 +91,7 @@ go
 create table [Interest] (
 	name nvarchar(32),
 	description ntext,
-	thumbnail varchar(256),
+	thumbnail image,
 	primary key(name)
 )
 go
@@ -235,3 +235,7 @@ check (attend = -1 or attend = 0 or attend = 1)
 alter table [UserUser]
 add constraint CST_Valid_Follow
 check (username1 != username2)
+
+alter table [Tag]
+add constraint CST_No_Space
+check (id not like '% %')
