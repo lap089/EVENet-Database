@@ -284,11 +284,23 @@ go
 
 /* 2.12.3 List all invited people with parameter -1, 0, 1 */
 create proc listInvitedPeople
-	@eventId int
+	@eventId int,
+	@status int
 as begin
 	select *
 	from [UserEventAttendants] att join [User] pro on att.username = pro.username
-	where att.event = @eventId
+	where att.event = @eventId and att.attend = @status
+end
+go
+
+/* 2.12.4 List all event that an user is invited with parameter -1, 0, 1 */
+create proc listInvitedEvents
+	@user varchar(32),
+	@status int
+as begin
+	select evnt.*
+	from [UserEventAttendants] att join [Event] evnt on att.event = evnt.id
+	where att.username = @user and att.attend = @status
 end
 go
 
@@ -435,4 +447,14 @@ go
 /* Users sectors */
 /* 4.1 Search users by interest */
 
-/* 4.2 Respond to an invitation */
+/* 4.2 Respond to an invitation : Notification here!!*/
+create proc respondInvitation
+	@user varchar(32),
+	@event int,
+	@decision int
+as begin
+	update [UserEventAttendants]
+	set attend = @decision
+	where username = @user and event = @event
+end
+go
