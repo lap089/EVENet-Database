@@ -1,10 +1,7 @@
-print [dbo].isUserExisted('tqhuy@apcs.vn')
-exec createRoot 'tqhuy@apcs.vn', 'Khoideptrai', null
-exec createIndividual 'lqtrung@apcs.vn', 'unrepentantSlacker', null, 'Trung', null, 'Let', '1995-11-1', 1
-exec follow 'hkhoi@apcs.vn', 'tqhuy@apcs.vn'
-print [dbo].isFollowing ('tqhuy@apcs.vn', 'hkhoi@apcs.vn')
-exec followerList 'hkhoi@apcs.vn'
-exec followingList 'hkhoi@apcs.vn'
-exec createLocation N'Nhà em', N'Đẹp trai', 'tada padum', 69, 96, null
-exec createEvent '2015-12-24', '2015-12-25', N'Đêm thánh vô cùng', 'Christmas!', null, 'lqtrung@apcs.vn'
-exec editLocation 1, 1
+exec createIndividual 'lqtrung@apcs.vn', 'Thisguysucks', null, 'Son', 'Xuan', 'Trinh', '1995-01-01', 1
+
+select * from [User]
+exec createEvent '2015-12-24', '2015-12-25', 'Holy Night', 'Christmas', 1, 'txson@apcs.vn'
+exec invite 1, 'tqhuy@apcs.vn'
+exec listInvitedEvents 'hkhoi@apcs.vn', 1
+select * from UserEventAttendants
