@@ -461,3 +461,22 @@ as begin
 	where username = @user and event = @event
 end
 go
+
+/* Notification Area */
+/* 1. Event Comment Notification */
+create trigger tr_EventComment
+	on [Comment]
+	for insert, update
+as begin
+	declare @sender varchar(32), @receiver varchar(32), @eventId int, @commentId int
+	select	@sender = author, @eventId = eventId, @commentId = id
+	from inserted
+
+	set @receiver = (	select username
+						from [Event] evnt join [Comment] cmt on evnt.id = cmt.eventId
+						where evnt.id = @eventId)
+	insert into [Notification] (receiver, sender, eventId, typeInfo) values
+	(@receiver, @sender, @eventId, 0)
+						
+end
+go
