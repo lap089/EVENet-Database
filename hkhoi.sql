@@ -472,11 +472,13 @@ as begin
 	select	@sender = author, @eventId = eventId, @commentId = id
 	from inserted
 
-	set @receiver = (	select username
-						from [Event] evnt join [Comment] cmt on evnt.id = cmt.eventId
-						where evnt.id = @eventId)
-	insert into [Notification] (receiver, sender, eventId, typeInfo) values
-	(@receiver, @sender, @eventId, 0)
-						
+	if @receiver != @sender begin
+
+		set @receiver = (	select username
+							from [Event] evnt join [Comment] cmt on evnt.id = cmt.eventId
+							where evnt.id = @eventId)
+		insert into [Notification] (receiver, sender, eventId, typeInfo) values
+		(@receiver, @sender, @eventId, 0)				
+	end
 end
 go
