@@ -219,6 +219,22 @@ alter table [Comment]
 add constraint FK_Comment_Author
 foreign key (author) references [User]([username])
 
+alter table [Notification]
+add constraint FK_Notify_Receiver
+foreign key (receiver) references [User]([username])
+
+
+alter table [Notification]
+add constraint FK_Notify_Sender
+foreign key (sender) references [User]([username])
+
+
+alter table [Notification]
+add constraint FK_Notify_Event
+foreign key (eventId) references [Event](id)
+
+
+
 /* ADD CONSTRAINTS */
 
 alter table [User]

@@ -482,3 +482,20 @@ as begin
 	end
 end
 go
+
+
+/* 2. User Invite Notification*/
+create trigger userInviteUser
+on [UserEventAttendants]
+for insert, update
+as
+begin
+	declare @username nvarchar(32) , @eventId int
+	select @username = username, @eventId = event from inserted
+	declare @sender varchar(32)
+	set @sender = (select e.username from [Event] e where e.id = @eventId)
+	insert into [Notification](receiver, sender, eventId, typeInfo)
+	values(@username, @sender, @eventId, 1)
+end
+go
+
