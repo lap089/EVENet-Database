@@ -25,7 +25,6 @@ create procedure createInterest
  end
 go
 
-
 /*get an interest */
 create procedure getInterest
  @name nvarchar(32)
@@ -51,8 +50,6 @@ begin
 end
 go
 
-
-
 create procedure searchInterestFromName
 @name nvarchar(32)
  as
@@ -62,7 +59,6 @@ create procedure searchInterestFromName
  end
 go
 
-
 create procedure searchUserFromInterest
 @interest nvarchar(32)
  as
@@ -71,8 +67,6 @@ create procedure searchUserFromInterest
 	where u.username = indin.username and  indin.interest = @interest
  end
 go
-
-
 
 /*delete an Event (must pass an username to check if it is author or admin)*/
 create procedure deleteEvent
@@ -104,10 +98,6 @@ create procedure setEvent
  end
  go
 
-
-
-
-
 create procedure attachInterest
 @username varchar(32), @interest nvarchar(32)
 as
@@ -131,8 +121,6 @@ begin
 end
 go
 
-
-
 --Check functions:
 create function isIndividual(@username varchar(32))
 	returns bit
@@ -144,10 +132,6 @@ as begin
 	return 0
 end
 go
-
-
-
-
 
 ----test:
 --exec dbo.createRoot 'tqlap@apcs.vn','fsdfsdfsdf',null 

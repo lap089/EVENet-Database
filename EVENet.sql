@@ -254,13 +254,9 @@ alter table [Tag]
 add constraint CST_No_Space
 check (id not like '% %')
 
-
-
 alter table [Notification]
 add constraint CST_Reciever_Sender
-check (reciever not like sender)
-
-
+check (receiver not like sender)
 
 go
 create trigger userInviteHimself
