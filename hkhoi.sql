@@ -168,6 +168,34 @@ as begin
 end
 go
 
+/* #8 */
+create proc getIndividual
+	@id varchar(32)
+as begin
+	select *
+		from Individual
+		where username = @id
+end
+go
+
+create proc setIndividual
+	@id varchar(32),
+	@firstName nvarchar(16),
+	@midName nvarchar(16),
+	@lastName nvarchar(16),
+	@dob date,
+	@gender bit
+as begin
+	update Individual
+		set	firstName = @firstName,
+			midName = @midName,
+			lastName = @lastName,
+			DOB = @dob,
+			gender = @gender
+		where username = @id
+end
+go
+
 /* 2.5 Allows users to set profile pictures */
 
 create proc setProfilePicture
