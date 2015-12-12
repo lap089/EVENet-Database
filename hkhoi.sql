@@ -106,13 +106,14 @@ create proc createUser
 	@username varchar(32),
 	@password varchar(64),
 	@profilePicture varchar(256),
+	@coverPicture varchar(256),
 	@userType int
 as begin
 	if (@userType = 0) begin
 		raiserror('No Permission!', 18, 0)
 	end else begin	
-		insert into [User] (username, [password], profilePicture, userType) values
-		(@username, @password, @profilePicture, @userType)
+		insert into [User] (username, [password], profilePicture, coverPicture, userType) values
+		(@username, @password, @profilePicture, @coverPicture ,@userType)
 	end
 end
 go
@@ -133,14 +134,14 @@ create proc createIndividual
 	@username varchar(32),
 	@password varchar(64),
 	@profilePicture varchar(256),
-
+	@coverPicture varchar(256),
 	@firstName nvarchar(16),
 	@midName nvarchar(16),
 	@lastName nvarchar(16),
 	@dob date,
 	@gender bit
 as begin
-	exec createUser @username, @password, @profilePicture, 1
+	exec createUser @username, @password, @profilePicture, @coverPicture, 1
 
 	insert into [Individual] values
 	(@username, @firstName, @midName, @lastName, @dob, @gender)
@@ -152,14 +153,14 @@ create proc createOrganization
 	@username varchar(32),
 	@password varchar(64),
 	@profilePicture varchar(256),
-
+	@coverPicture varchar(256),
 	@description nvarchar(1024),
 	@type nvarchar(32),
 	@phone varchar(16),
 	@website varchar(256)
 as begin
 	if [dbo].isTypeExisted(@type) = 1 begin
-		exec createUser @username, @password, @profilePicture, 2
+		exec createUser @username, @password, @profilePicture, @coverPicture, 2
 		insert into [Organization] values
 		(@username, @description, @type, @phone, @website)
 	end else begin
