@@ -118,6 +118,21 @@ as begin
 end
 go
 
+
+-- Set User's cover photo
+create proc setCoverPictureUser
+	@id varchar(32),
+	@cover varchar(256)
+as begin
+	update [user]
+		set	coverPicture = @cover
+		where username = @id
+end
+go
+
+
+
+
 /* 2.2 Check if users' aunthentication is valid */
 create function [auth](@username varchar(32), @password varchar(64))
 	returns bit
@@ -150,6 +165,8 @@ as begin
 end
 go
 
+
+
 /* 2.4 Create an organization */
 create proc createOrganization
 	@username varchar(32),
@@ -170,6 +187,28 @@ as begin
 	end
 end
 go
+
+
+
+
+--	Set organization's information:
+create proc setOrganization
+	@id varchar(32),
+	@description nvarchar(1024),
+	@type nvarchar(32),
+	@phone varchar(16),
+	@website varchar(256)
+as begin
+	update Organization
+		set	description = @description,
+			[type] = @type,
+			[phone] = @phone,
+			website = @website
+		where username = @id
+end
+go
+
+
 
 /* #8 */
 create proc getIndividual
@@ -198,6 +237,7 @@ as begin
 		where username = @id
 end
 go
+
 
 /* 2.5 Allows users to set profile pictures */
 
