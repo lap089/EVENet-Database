@@ -130,7 +130,6 @@ as begin
 end
 go
 
-drop function [auth]
 
 /* 2.3 Create an individual */
 create proc createIndividual
