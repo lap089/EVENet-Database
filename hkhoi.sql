@@ -32,7 +32,7 @@
 create proc createRoot
 	@username varchar(32),
 	@password varchar(64),
-	@profilePicture image
+	@profilePicture varchar(256)
 as begin
 	insert into [User] (username, [password], profilePicture, userType) values
 	(@username, @password, @profilePicture, 0)
@@ -61,7 +61,7 @@ create proc createLocation
 	@address nvarchar(64),
 	@long real,
 	@lat real,
-	@thumbnail image
+	@thumbnail varchar(256)
 as begin
 	insert into [Location] (name, description, address, longitude, latitude, thumbnail) values
 	(@name, @description, @address, @long, @lat, @thumbnail)
@@ -105,7 +105,7 @@ go
 create proc createUser
 	@username varchar(32),
 	@password varchar(64),
-	@profilePicture image,
+	@profilePicture varchar(256),
 	@userType int
 as begin
 	if (@userType = 0) begin
@@ -132,7 +132,7 @@ go
 create proc createIndividual
 	@username varchar(32),
 	@password varchar(64),
-	@profilePicture image,
+	@profilePicture varchar(256),
 
 	@firstName nvarchar(16),
 	@midName nvarchar(16),
@@ -151,7 +151,7 @@ go
 create proc createOrganization
 	@username varchar(32),
 	@password varchar(64),
-	@profilePicture image,
+	@profilePicture varchar(256),
 
 	@description nvarchar(1024),
 	@type nvarchar(32),
@@ -200,10 +200,10 @@ go
 
 create proc setProfilePicture
 	@username varchar(32), 
-	@image image 
+	@imageprofile varchar(256) 
 as begin
 	update [User]
-	set profilePicture = @image
+	set profilePicture = @imageprofile
 	where username = @username
 end
 go
@@ -211,7 +211,7 @@ go
 /* 2.6 Allows users to set new password */
 create proc setPassword
 	@username varchar(32),
-	@oldPassword varchar(64),
+	@oldPassword varchar(64),	
 	@newPassword varchar(64)
 as begin
 	if [dbo].[auth](@username, @oldPassword) = 1 begin
@@ -273,7 +273,7 @@ create proc createEvent
 	@beginTime datetime,
 	@endTime datetime,
 	@description nvarchar(1024),
-	@thumbnail image,
+	@thumbnail varchar(256),
 	@title nvarchar(128),
 	@location int,
 	@currentUser varchar(32)

@@ -13,7 +13,7 @@ go
 
 /*Create an interest (Admin only)*/
 create procedure createInterest
- @name nvarchar(32), @description nvarchar(1024), @thumbnail image
+ @name nvarchar(32), @description nvarchar(1024), @thumbnail varchar(256)
  as
  begin
 	if(dbo.isAdmin(@name) = 1)
@@ -85,7 +85,7 @@ go
 /*Change an Event (must pass an username to check if it is author or admin)*/
 create procedure setEvent
 @id int, @username nvarchar(32), @begintime datetime,
- @endtime datetime, @description nvarchar(1024),@thumbnail image ,@title nvarchar(128),   
+ @endtime datetime, @description nvarchar(1024),@thumbnail varchar(256) ,@title nvarchar(128),   
  @location int
  as
  begin

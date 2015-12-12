@@ -9,7 +9,8 @@ go
 create table [User] (
 	username varchar(32) not null,
 	password varchar(64) not null,
-	profilePicture image,
+	profilePicture varchar(256),
+	coverPicture varchar(256),
 	registerDate datetime default getdate() not null,
 	userType int not null,
 	primary key(username)
@@ -23,6 +24,7 @@ create table [Individual] (
 	lastName nvarchar(16) not null,
 	DOB date not null,
 	gender bit not null,
+	
 	primary key(username)
 )
 go
@@ -47,7 +49,7 @@ create table [Event] (
 	beginTime datetime not null,
 	endTime datetime not null,
 	description nvarchar(1024) not null,
-	thumbnail image,
+	thumbnail varchar(256),
 	title nvarchar(128) not null,
 	location int not null,
 	username varchar(32) not null,
@@ -63,7 +65,7 @@ create table [Location] (
 	address nvarchar(64) not null,
 	longitude real,
 	latitude real,
-	thumbnail image,
+	thumbnail varchar(256),
 	primary key(ID)
 )
 go
@@ -92,7 +94,7 @@ go
 create table [Interest] (
 	name nvarchar(32),
 	description nvarchar(1024),
-	thumbnail image,
+	thumbnail varchar(256),
 	primary key(name)
 )
 go
@@ -123,7 +125,7 @@ go
 create table [Photo] (
 	eventId int not null,
 	[order] int not null,
-	data image not null,
+	data varchar(256) not null,
 
 	primary key (eventId, [order])
 )
