@@ -123,15 +123,18 @@ create function [auth](@username varchar(32), @password varchar(64))
 	returns bit
 as begin
 	declare @userPassword varchar(64) = (select [password] from [User] where [username] = @username)
-	if (@userPassword = @password) begin
+	if (@userPassword COLLATE Latin1_General_CS_AS = @password COLLATE Latin1_General_CS_AS) begin
 		return 1
 	end
 	return 0
 end
 go
+
+drop function [auth]
+
 /* 2.3 Create an individual */
 create proc createIndividual
-	@username varchar(32),
+	@username varchar(32) ,
 	@password varchar(64),
 	@profilePicture varchar(256),
 	@coverPicture varchar(256),
@@ -141,7 +144,7 @@ create proc createIndividual
 	@dob date,
 	@gender bit
 as begin
-	exec createUser @username, @password, @profilePicture, @coverPicture, 1
+	exec createUser @username , @password , @profilePicture, @coverPicture, 1
 
 	insert into [Individual] values
 	(@username, @firstName, @midName, @lastName, @dob, @gender)

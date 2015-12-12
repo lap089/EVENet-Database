@@ -7,15 +7,29 @@ go
 use [EVENeT]
 go
 create table [User] (
-	username varchar(32) not null,
+	username  varchar(32) not null ,
 	password varchar(64) not null,
 	profilePicture varchar(256),
 	coverPicture varchar(256),
 	registerDate datetime default getdate() not null,
 	userType int not null,
-	primary key(username)
+
 )
+
+
+ALTER TABLE [User]
+ALTER COLUMN password varchar(64)
+COLLATE Latin1_General_CS_AS not null
+
+ALTER TABLE [User]
+ALTER COLUMN username varchar(32)
+COLLATE SQL_Latin1_General_CP1_CS_AS not null 
+
+ALTER TABLE [user]
+ADD PRIMARY KEY (username)
 go
+
+
 
 create table [Individual] (
 	username varchar(32) not null,
@@ -25,9 +39,17 @@ create table [Individual] (
 	DOB date not null,
 	gender bit not null,
 	
-	primary key(username)
 )
+
+ALTER TABLE [Individual]
+ALTER COLUMN username varchar(32)
+COLLATE SQL_Latin1_General_CP1_CS_AS not null 
+
+ALTER TABLE [Individual]
+ADD PRIMARY KEY (username)
 go
+
+
 
 create table [Organization] (
 	username varchar(32) not null,
@@ -35,14 +57,23 @@ create table [Organization] (
 	[type] nvarchar(32) not null,
 	[phone] varchar(16),
 	website varchar(256),
-	primary key(username)
 )
+ALTER TABLE [Organization]
+ALTER COLUMN username varchar(32)
+COLLATE SQL_Latin1_General_CP1_CS_AS not null 
+
+ALTER TABLE [Organization]
+ADD PRIMARY KEY (username)
 go
+
+
 
 create table [Type] (
 	name nvarchar(32),
-	primary key (name)
+	primary key(name)
 )
+
+
 
 create table [Event] (
 	id int identity(1, 1) not null,
@@ -56,7 +87,12 @@ create table [Event] (
 	publishDate datetime default getdate(),
 	primary key(id)
 )
+ALTER TABLE [Event]
+ALTER COLUMN username varchar(32)
+COLLATE SQL_Latin1_General_CP1_CS_AS not null 
 go
+
+
 
 create table [Location] (
 	id int identity(1, 1) not null,
@@ -70,6 +106,8 @@ create table [Location] (
 )
 go
 
+
+
 create table [EventTag] (
 	event int not null,
 	tag varchar(32) not null,
@@ -80,9 +118,20 @@ go
 create table [UserUser] (
 	username1 varchar(32) not null,
 	username2 varchar(32) not null,
-	primary key(username1, Username2)
 )
+ALTER TABLE [UserUser]
+ALTER COLUMN username1 varchar(32)
+COLLATE SQL_Latin1_General_CP1_CS_AS not null 
+
+ALTER TABLE [UserUser]
+ALTER COLUMN username2 varchar(32)
+COLLATE SQL_Latin1_General_CP1_CS_AS not null 
+
+ALTER TABLE [UserUser]
+ADD PRIMARY KEY (username2, username1)
 go
+
+
 
 create table [Tag] (
 	id varchar(32) not null,
@@ -90,6 +139,7 @@ create table [Tag] (
 	primary key(id)
 )
 go
+
 
 create table [Interest] (
 	name nvarchar(32),
@@ -101,26 +151,45 @@ go
 
 create table [IndividualInterest] (
 	username varchar(32) not null,
-	interest nvarchar(32),
-	primary key(username, interest)
+	interest nvarchar(32) not null,
 )
+
+ALTER TABLE [IndividualInterest]
+ALTER COLUMN username varchar(32)
+COLLATE SQL_Latin1_General_CP1_CS_AS not null 
+
+ALTER TABLE [IndividualInterest]
+ADD PRIMARY KEY (username, interest)
 go
+
 
 create table [Admin] (
 	username varchar(32),
-	primary key (username)
 )
+
+ALTER TABLE [Admin]
+ALTER COLUMN username varchar(32)
+COLLATE SQL_Latin1_General_CP1_CS_AS not null 
+
+ALTER TABLE [Admin]
+ADD PRIMARY KEY (username)
 go
+
 
 create table [UserEventAttendants] (
-	username varchar(32),
-	event int,
+	username varchar(32) not null,
+	event int not null,
 	attend int default 0 not null,
-
-	primary key(username, event)
 )
 
+ALTER TABLE [UserEventAttendants]
+ALTER COLUMN username varchar(32)
+COLLATE SQL_Latin1_General_CP1_CS_AS not null 
+
+ALTER TABLE [UserEventAttendants]
+ADD PRIMARY KEY (username,event)
 go
+
 
 create table [Photo] (
 	eventId int not null,
@@ -135,21 +204,43 @@ create table [Comment] (
 	content nvarchar(1024) not null,
 	eventId int,
 	author varchar(32),
-
 	primary key(id)
 )
+
+ALTER TABLE [Comment]
+ALTER COLUMN author varchar(32)
+COLLATE SQL_Latin1_General_CP1_CS_AS not null 
+go
 
 
 create table [Notification](
 	id int identity(1,1),
-	receiver varchar(32),
-	sender varchar(32),
+	receiver varchar(32) not null,
+	sender varchar(32) not null,
 	eventId int,
 	typeInfo int,
 	Seen bit default 0,
 	timeSent datetime default getdate(),
 	primary key(id)
 )
+
+ALTER TABLE [Notification]
+ALTER COLUMN receiver varchar(32)
+COLLATE SQL_Latin1_General_CP1_CS_AS not null 
+
+ALTER TABLE [Notification]
+ALTER COLUMN sender varchar(32)
+COLLATE SQL_Latin1_General_CP1_CS_AS not null 
+go
+
+
+
+
+
+
+
+
+
 
 /* ADD FOREIGN KEYS */
 
@@ -237,6 +328,8 @@ foreign key (eventId) references [Event](id)
 
 
 
+
+
 /* ADD CONSTRAINTS */
 
 alter table [User]
@@ -291,3 +384,6 @@ begin
 		end
 end
 go
+
+
+

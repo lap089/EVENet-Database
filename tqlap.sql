@@ -141,3 +141,7 @@ go
 --exec dbo.createEvent '2016-3-3','2016-4-4','fdsgrefew',null,'test',1,'tqlap@apcs.vn'
 
 --exec dbo.invite 6,'tqlap@apcs.vn'
+
+--exec dbo.createIndividual 'lap@apcs.vn', 'TrieuQuoc', '','','','','','1995/1/1',1
+
+--print dbo.auth('lap@apcs.vn','TrieuQuoc')

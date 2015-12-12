@@ -12,3 +12,7 @@ exec createLocation 'HCMUS', 'My school', '227 Nguyen Van Cu', 6, 9, null
 exec createEvent '2015-12-24', '2015-12-25', 'Holy Night', null, 'Silent Night', 1, 'hkhoi@apcs.vn'
 exec addComennt 1, 'tqhuy@apcs.vn', 'LOL wot?'
 exec addComennt 1, 'tqhuy@apcs.vn', 'LOL wot?'
+
+
+
+exec createIndividual 'lap089@apcs.vn', '12345678', '','','','','','1995-01-01',1
