@@ -1,4 +1,4 @@
-
+﻿
 use[EVENet]
 go
 
@@ -132,6 +132,35 @@ as begin
 	return 0
 end
 go
+
+
+
+
+-- Check if individual account is fully set up
+create function isIndividualFullySetUp(@username varchar(32))
+	returns bit
+as begin
+	if exists (select * from [Individual] where username = @username AND firstName = '') begin
+		return 1
+	end
+	return 0
+end
+go
+
+​
+-- Get user's type
+create function getUserType(@username varchar(32))
+returns int
+as begin
+	declare @result int
+	Select @result = userType
+	from [User]
+	where username = @username
+	return @result
+end
+go
+
+
 
 ----test:
 --exec dbo.createRoot 'tqlap@apcs.vn','fsdfsdfsdf',null 
