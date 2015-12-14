@@ -100,7 +100,8 @@ create table [Location] (
 	name nvarchar(32) not null,
 	description nvarchar(1024),
 	address nvarchar(64) not null,
-	LaLongitude [geography] NOT NULL,
+	latitude float not null,
+	longitude float not null,
 	thumbnail varchar(256),
 	primary key(ID)
 )

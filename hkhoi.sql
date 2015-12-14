@@ -59,11 +59,12 @@ create proc createLocation
 	@name nvarchar(32),
 	@description nvarchar(1024),
 	@address nvarchar(64),
-	@lalongitue geography,
+	@latitude float,
+	@longitude float,
 	@thumbnail varchar(256)
 as begin
 	insert into [Location] (name, description, address, laLongitude, thumbnail) values
-	(@name, @description, @address, @lalongitue, @thumbnail)
+	(@name, @description, @address, @latitude, @longitude, @thumbnail)
 end
 go
 
@@ -74,11 +75,12 @@ create proc setLocation
 	@name nvarchar(32),
 	@description nvarchar(1024),
 	@address nvarchar(64),
-	@lalongitue geography,
+	@latitude float,
+	@longitude float,
 	@thumbnail varchar(256)
 as begin
 	update [Location] 
-	set name = @name, description= @description, address = @address, laLongitude = @lalongitue, thumbnail = @thumbnail
+	set name = @name, description= @description, address = @address, latitude = @latitude, longitude =@longitude, thumbnail = @thumbnail
 	where id = @id
 	end
 go
