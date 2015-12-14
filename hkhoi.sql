@@ -63,13 +63,13 @@ create proc createLocation
 	@longitude float,
 	@thumbnail varchar(256)
 as begin
-	insert into [Location] (name, description, address, laLongitude, thumbnail) values
+	insert into [Location] (name, description, address, latitude, longitude, thumbnail) values
 	(@name, @description, @address, @latitude, @longitude, @thumbnail)
 end
 go
 
 
-/* 0.3 Create location */
+/* 0.3 Set location */
 create proc setLocation
 	@id int,
 	@name nvarchar(32),
@@ -82,6 +82,28 @@ as begin
 	update [Location] 
 	set name = @name, description= @description, address = @address, latitude = @latitude, longitude =@longitude, thumbnail = @thumbnail
 	where id = @id
+	end
+go
+
+
+-- Get location from an address
+create function getLocationFromAddress (@address nvarchar(64))
+returns int
+as begin
+	declare @id int
+	select @id = ID from [Location]
+	where address = @address
+	return @id
+	end
+go
+
+
+--Get location from an Id
+create proc getLocationFromId
+	@id int
+as begin
+	select  * from [Location] 
+	where ID = @id
 	end
 go
 
@@ -109,6 +131,7 @@ as begin
 	return 0
 end
 go
+
 /* 2. CORE SECTOR */
 /* 2.0 Check if an user is existed */
 create function isUserExisted(@username varchar(32)) 
