@@ -188,6 +188,7 @@ go
 create proc createOrganization
 	@username varchar(32),
 	@password varchar(64),
+	@name nvarchar(64),
 	@profilePicture varchar(256),
 	@coverPicture varchar(256),
 	@description nvarchar(1024),
@@ -198,7 +199,7 @@ as begin
 	if [dbo].isTypeExisted(@type) = 1 begin
 		exec createUser @username, @password, @profilePicture, @coverPicture, 2
 		insert into [Organization] values
-		(@username, @description, @type, @phone, @website)
+		(@username, @name, @description, @type, @phone, @website)
 	end else begin
 		raiserror('Type does not exist!', 18, 2)
 	end
@@ -211,6 +212,7 @@ go
 --	Set organization's information:
 create proc setOrganization
 	@id varchar(32),
+	@name nvarchar(64),
 	@description nvarchar(1024),
 	@type nvarchar(32),
 	@phone varchar(16),
@@ -218,6 +220,7 @@ create proc setOrganization
 as begin
 	update Organization
 		set	description = @description,
+			name = @name,
 			[type] = @type,
 			[phone] = @phone,
 			website = @website
