@@ -59,14 +59,31 @@ create proc createLocation
 	@name nvarchar(32),
 	@description nvarchar(1024),
 	@address nvarchar(64),
-	@long real,
-	@lat real,
+	@lalongitue geography,
 	@thumbnail varchar(256)
 as begin
-	insert into [Location] (name, description, address, longitude, latitude, thumbnail) values
-	(@name, @description, @address, @long, @lat, @thumbnail)
+	insert into [Location] (name, description, address, laLongitude, thumbnail) values
+	(@name, @description, @address, @lalongitue, @thumbnail)
 end
 go
+
+
+/* 0.3 Create location */
+create proc setLocation
+	@id int,
+	@name nvarchar(32),
+	@description nvarchar(1024),
+	@address nvarchar(64),
+	@lalongitue geography,
+	@thumbnail varchar(256)
+as begin
+	update [Location] 
+	set name = @name, description= @description, address = @address, laLongitude = @lalongitue, thumbnail = @thumbnail
+	where id = @id
+	end
+go
+
+
 /* END ADMIN SECTOR */
 
 /* 1. ORGANIZATION TYPE SECTOR */
@@ -325,8 +342,10 @@ as begin
 	(@beginTime, @endTime, @description,@thumbnail, @title, @location, @currentUser, null)
 end
 go
-/* 2.12 Edit event location */
-create proc editLocation
+
+
+/* 2.12 Attach event location */
+create proc attachLocation
 	@eventId int,
 	@newLocation int
 as begin

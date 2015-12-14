@@ -53,6 +53,7 @@ go
 
 create table [Organization] (
 	username varchar(32) not null,
+	name nvarchar(64) not null,
 	description nvarchar(max) not null,
 	[type] nvarchar(32) not null,
 	[phone] varchar(16),
@@ -99,8 +100,7 @@ create table [Location] (
 	name nvarchar(32) not null,
 	description nvarchar(1024),
 	address nvarchar(64) not null,
-	longitude real,
-	latitude real,
+	LaLongitude [geography] NOT NULL,
 	thumbnail varchar(256),
 	primary key(ID)
 )
