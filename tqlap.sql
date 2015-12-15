@@ -85,7 +85,7 @@ go
 /*Change an Event (must pass an username to check if it is author or admin)*/
 create procedure setEvent
 @id int, @username nvarchar(32), @begintime datetime,
- @endtime datetime, @description nvarchar(1024),@thumbnail varchar(256) ,@title nvarchar(128),   
+ @endtime datetime, @description nvarchar(1024),@thumbnail varchar(256) ,@title nvarchar(128), @ticket int,  
  @location int
  as
  begin
@@ -93,10 +93,16 @@ create procedure setEvent
 	raiserror('Only author or admin can edit',10,1)
 	else
 	update [Event]
-	set beginTime = @begintime, endTime = @endtime, description = @description,title =@title, thumbnail = @thumbnail ,location = @location
+	set beginTime = @begintime, endTime = @endtime,
+	 description = @description,title =@title, thumbnail = @thumbnail 
+	 , ticket = @ticket,location = @location
 	where id = @id
  end
  go
+
+
+
+
 
 create procedure attachInterest
 @username varchar(32), @interest nvarchar(32)
@@ -159,6 +165,28 @@ as begin
 	return @result
 end
 go
+
+
+
+
+​
+-- Get number of ticket of an event
+create function getNumberOfTicket(@eventId int)
+returns int
+as begin
+	declare @result int
+	Select @result = count(*)
+	from [UserEventAttendants]
+	where event = @eventId
+	return @result
+end
+go
+
+
+
+
+
+
 
 
 

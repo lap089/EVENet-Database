@@ -83,6 +83,7 @@ create table [Event] (
 	description nvarchar(1024) not null,
 	thumbnail varchar(256),
 	title nvarchar(128) not null,
+	ticket int,
 	location int not null,
 	username varchar(32) not null,
 	publishDate datetime default getdate(),
@@ -182,7 +183,6 @@ create table [UserEventAttendants] (
 	event int not null,
 	attend int default 0 not null,
 )
-
 ALTER TABLE [UserEventAttendants]
 ALTER COLUMN username varchar(32)
 COLLATE SQL_Latin1_General_CP1_CS_AS not null 

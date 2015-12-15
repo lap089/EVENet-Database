@@ -12,6 +12,7 @@
   * setPassword: 18, 3: Wrong old password -> occurs when users input wrong old password but still can be
   *						able to change password.
   * deleteComment 18, 4: Remove a comment without authority
+  * checkAvailableTicket 18, 5: Do not have enough slot
   */
 
   /* PERSONAL NOTE:
@@ -363,11 +364,12 @@ create proc createEvent
 	@description nvarchar(1024),
 	@thumbnail varchar(256),
 	@title nvarchar(128),
+	@ticket int,
 	@location int,
 	@currentUser varchar(32)
 as begin
-	insert into [Event] values
-	(@beginTime, @endTime, @description,@thumbnail, @title, @location, @currentUser, null)
+	insert into [Event](beginTime,endTime,description,thumbnail,title,ticket,location,username) values
+	(@beginTime, @endTime, @description,@thumbnail, @title, @location, @ticket, @currentUser)
 end
 go
 
@@ -392,6 +394,28 @@ as begin
 	(@username, @eventId, 0)
 end
 go
+
+
+-- Trigger for inviting: 
+create trigger checkAvalableTicket
+on [UserEventAttendants]
+for insert, update
+as
+begin
+	declare @username nvarchar(32) , @event int,
+	 @count int, @available int
+	select @username = username, @event = event from inserted
+	select @count = count(*) from [UserEventAttendants] where event = @event
+	set @available = dbo.getNumOfTicket(@event) 
+	if(@count > @available)
+		begin
+		raiserror('Not enough slot',18,5)
+		rollback
+		end
+end
+go
+
+
 
 /* 2.12.2 disinvite an user */
 create proc disinvite 
