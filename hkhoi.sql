@@ -258,16 +258,9 @@ go
 
 /* getIndividual from username */
 create proc getIndividual
-	@id varchar(32),
-	@firstName nvarchar(16) out,
-	@midName nvarchar(16) out,
-	@lastName nvarchar(16) out,
-	@dob date out,
-	@gender bit out
+	@id varchar(32)
 as begin
-	select @firstName =I.firstName, @midName = I.midName, 
-	@lastName = I.lastName, @dob = I.DOB, @gender = I.gender 
-		from Individual I
+	select * from [Individual]
 		where username = @id
 end
 go
