@@ -256,15 +256,28 @@ go
 
 
 
-/* #8 */
+/* getIndividual from username */
 create proc getIndividual
-	@id varchar(32)
+	@id varchar(32),
+	@firstName nvarchar(16) out,
+	@midName nvarchar(16) out,
+	@lastName nvarchar(16) out,
+	@dob date out,
+	@gender bit out
 as begin
-	select *
-		from Individual
+	select @firstName =I.firstName, @midName = I.midName, 
+	@lastName = I.lastName, @dob = I.DOB, @gender = I.gender 
+		from Individual I
 		where username = @id
 end
 go
+
+
+
+
+
+
+
 
 create proc setIndividual
 	@id varchar(32),
@@ -296,6 +309,18 @@ as begin
 	where username = @username
 end
 go
+
+
+
+-- Get User information:
+create proc getUser
+	@username varchar(32) 
+as begin
+	select * from [User] where username = @username
+end
+go
+
+
 
 /* 2.6 Allows users to set new password */
 create proc setPassword
