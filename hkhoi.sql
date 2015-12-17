@@ -59,7 +59,7 @@ go
 create proc createLocation
 	@name nvarchar(32),
 	@description nvarchar(1024),
-	@address nvarchar(64),
+	@address nvarchar(256),
 	@latitude float,
 	@longitude float,
 	@thumbnail varchar(256)
@@ -75,7 +75,7 @@ create proc setLocation
 	@id int,
 	@name nvarchar(32),
 	@description nvarchar(1024),
-	@address nvarchar(64),
+	@address nvarchar(256),
 	@latitude float,
 	@longitude float,
 	@thumbnail varchar(256)
@@ -88,7 +88,7 @@ go
 
 
 -- Get location from an address
-create function getLocationFromAddress (@address nvarchar(64))
+create function getLocationFromAddress (@address nvarchar(256))
 returns int
 as begin
 	declare @id int
