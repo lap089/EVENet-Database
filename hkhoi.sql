@@ -387,7 +387,7 @@ create proc createEvent
 	@currentUser varchar(32)
 as begin
 	insert into [Event](beginTime,endTime,description,thumbnail,title,ticket,location,username) values
-	(@beginTime, @endTime, @description,@thumbnail, @title, @location, @ticket, @currentUser)
+	(@beginTime, @endTime, @description,@thumbnail, @title,@ticket, @location, @currentUser)
 end
 go
 
