@@ -186,6 +186,13 @@ go
 
 
 
+-- Get all events
+create procedure getAllEvent
+as
+begin
+	select * from [Event]
+end
+go
 
 
 
@@ -199,6 +206,13 @@ go
 
 --exec dbo.invite 6,'tqlap@apcs.vn'
 
---exec dbo.createIndividual 'lap@apcs.vn', 'TrieuQuoc', '','','','','','1995/1/1',1
+--exec dbo.createIndividual 'lap@apcs.vn', '123456789', '','','','','','1995/1/1',1
 
 --print dbo.auth('lap@apcs.vn','TrieuQuoc')
+
+exec dbo.createEvent '2016/1/1', '2016/2/2','just for test purpose','','test1', 1,10,'lap@apcs.vn' 
+exec dbo.createEvent '2016/1/1', '2016/2/2','jDid you know that the United States will select its next president in 2016? Come learn about the elections process in the United States through a series of talks with our consulate officers. Bring your friends!', '','test2', 1,10,'lap@apcs.vn' 
+
+exec dbo.createEvent '2016/1/1', '2016/2/2','just for test purpose','','test3', 1,10,'lap@apcs.vn' 
+exec dbo.createEvent '2016/1/1', '2016/2/2','just for test purpose','','test4', 1,10,'lap@apcs.vn' 
+exec dbo.createEvent '2016/1/1', '2016/2/2','just for test purpose','D:\Pictures\1604833_490094347765755_1526518009_n.jpg','test6', 1,10,'lap@apcs.vn' 
