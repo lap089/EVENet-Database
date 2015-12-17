@@ -195,6 +195,15 @@ end
 go
 
 
+-- Get event from ID
+create procedure getEventFromID
+@eventid int
+as
+begin
+	select * from [Event] where id = @eventid
+end
+go
+
 
 
 ----test:
