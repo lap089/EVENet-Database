@@ -1,4 +1,4 @@
-/* NOTE:
+﻿/* NOTE:
  * userType: 0: Admin, 1: Individual, 2: Organization
  * gender: 0: Female, 1: Male
  * attendance: -1: No, 0: Maybe, 1: Yes
@@ -348,21 +348,33 @@ create proc unfollow @this varchar(32), @friend varchar(32) as begin
 end
 go
 
+
 /* 2.9 List all following accounts from an user */
 create proc followingList @this varchar(32) as begin
-	select pro.username, pro.profilePicture, pro.userType
-	from UserUser rel join [User] pro on rel.username2 = pro.username
-	where username1 = @this
+	select pro.username, pro.profilePicture, i.firstName as Name, pro.userType
+	from [UserUser] rel, [User] pro, [Individual] i
+	where rel.username2 = pro.username AND pro.userType = 1 AND i.username = pro.username AND rel.username1 = @this
+	union
+	select pro.username, pro.profilePicture, o.name as Name, pro.userType
+	from [UserUser] rel, [User] pro, [Organization] o
+	where rel.username2 = pro.username AND pro.userType = 2 AND o.username = pro.username AND rel.username1 = @this
+end
+go
+​
+/* 2.9.1 List all follower from an user */
+create proc followerList @this varchar(32) as begin
+	select pro.username, pro.profilePicture, i.firstName as Name, pro.userType
+	from [UserUser] rel, [User] pro, [Individual] i
+	where rel.username1 = pro.username AND pro.userType = 1 AND i.username = pro.username AND rel.username2 = @this
+	union
+	select pro.username, pro.profilePicture, o.name as Name, pro.userType
+	from [UserUser] rel, [User] pro, [Organization] o
+	where rel.username1 = pro.username AND pro.userType = 2 AND o.username = pro.username AND rel.username2 = @this
 end
 go
 
-/* 2.9.1 List all follower from an user */
-create proc followerList @this varchar(32) as begin
-	select pro.username, pro.profilePicture, pro.userType
-	from UserUSer rel join [User] pro on rel.username1 = pro.username
-	where username2 = @this
-end
-go
+--drop procedure  dbo.followerList 
+--drop procedure dbo.followingList
 
 /* 2.10 Check if a person is following another  */
 create function isFollowing(@this varchar(32), @that varchar(32))

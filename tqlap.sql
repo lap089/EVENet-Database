@@ -206,6 +206,36 @@ go
 
 
 
+-- Get event from name:
+create procedure getEventFromName
+@name nvarchar(128)
+as
+begin
+	select e.id, e.title, e.thumbnail from [Event] e where title like '%' + @name + '%' or @name like '%' + title + '%'
+end
+go
+
+--Get username from name:
+create procedure getUserFromName
+@name nvarchar(64)
+as
+begin
+	select  i.username, u.profilePicture, u.userType  from [Individual] i, [User] u 
+	where i.lastName + i.midName + i.firstName  like '%' + @name + '%' and i.username = u.username
+	union
+	select o.username, u.coverPicture, u.userType  from [Organization] o, [User] u 
+	where u.username = o.username and o.name like '%' + @name + '%' or @name like '%' + o.name + '%' 
+end
+go
+
+
+--drop procedure dbo.getEventFromName
+--drop procedure dbo.getUserFromName
+
+
+
+select * from [Individual] i, [Individual] e
+
 ----test:
 --exec dbo.createRoot 'tqlap@apcs.vn','fsdfsdfsdf',null 
 --exec dbo.createLocation 'here','fsdfdsf','fsdfew','321','3213',null
