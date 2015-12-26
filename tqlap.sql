@@ -1,4 +1,4 @@
-﻿
+
 use[EVENet]
 go
 
@@ -146,7 +146,18 @@ go
 create function isIndividualFullySetUp(@username varchar(32))
 	returns bit
 as begin
-	if exists (select * from [Individual] where username = @username AND firstName = '') begin
+	if exists (select * from [Individual] where username = @username AND firstName != '') begin
+		return 1
+	end
+	return 0
+end
+go
+
+-- Check if organization account is fully set up
+create function isOrganizationFullySetUp(@username varchar(32))
+	returns bit
+as begin
+	if exists (select * from [Organization] where username = @username AND Name != '') begin
 		return 1
 	end
 	return 0
@@ -220,10 +231,10 @@ create procedure getUserFromName
 @name nvarchar(64)
 as
 begin
-	select  i.username, u.profilePicture, u.userType  from [Individual] i, [User] u 
+	select  i.username, u.profilePicture, i.firstName as [Name] from [Individual] i, [User] u 
 	where i.lastName + i.midName + i.firstName  like '%' + @name + '%' and i.username = u.username
 	union
-	select o.username, u.coverPicture, u.userType  from [Organization] o, [User] u 
+	select o.username, u.coverPicture, o.name as [Name] from [Organization] o, [User] u 
 	where u.username = o.username and o.name like '%' + @name + '%' or @name like '%' + o.name + '%' 
 end
 go

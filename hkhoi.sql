@@ -1,4 +1,4 @@
-﻿/* NOTE:
+/* NOTE:
  * userType: 0: Admin, 1: Individual, 2: Organization
  * gender: 0: Female, 1: Male
  * attendance: -1: No, 0: Maybe, 1: Yes
@@ -244,6 +244,11 @@ create proc setOrganization
 	@phone varchar(16),
 	@website varchar(256)
 as begin
+	if (not exists (select * from Organization where username = @id))
+	begin
+		insert into [Organization](username) values (@id)
+	end
+
 	update Organization
 		set	description = @description,
 			name = @name,
@@ -266,10 +271,14 @@ end
 go
 
 
-
-
-
-
+/* getOrganization from username */
+create proc getOrganization
+	@id varchar(32)
+as begin
+	select * from [Organization]
+		where username = @id
+end
+go
 
 
 create proc setIndividual
@@ -280,6 +289,11 @@ create proc setIndividual
 	@dob date,
 	@gender bit
 as begin
+	if (not exists (select * from Individual where username = @id))
+	begin
+		insert into [Individual](username) values (@id)
+	end
+
 	update Individual
 		set	firstName = @firstName,
 			midName = @midName,
@@ -348,7 +362,6 @@ create proc unfollow @this varchar(32), @friend varchar(32) as begin
 end
 go
 
-
 /* 2.9 List all following accounts from an user */
 create proc followingList @this varchar(32) as begin
 	select pro.username, pro.profilePicture, i.firstName as Name, pro.userType
@@ -360,7 +373,7 @@ create proc followingList @this varchar(32) as begin
 	where rel.username2 = pro.username AND pro.userType = 2 AND o.username = pro.username AND rel.username1 = @this
 end
 go
-​
+
 /* 2.9.1 List all follower from an user */
 create proc followerList @this varchar(32) as begin
 	select pro.username, pro.profilePicture, i.firstName as Name, pro.userType
@@ -372,9 +385,6 @@ create proc followerList @this varchar(32) as begin
 	where rel.username1 = pro.username AND pro.userType = 2 AND o.username = pro.username AND rel.username2 = @this
 end
 go
-
---drop procedure  dbo.followerList 
---drop procedure dbo.followingList
 
 /* 2.10 Check if a person is following another  */
 create function isFollowing(@this varchar(32), @that varchar(32))
@@ -670,5 +680,3 @@ begin
 	values(@username, @sender, @eventId, 1)
 end
 go
-
-
