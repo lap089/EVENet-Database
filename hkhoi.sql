@@ -246,16 +246,18 @@ create proc setOrganization
 as begin
 	if (not exists (select * from Organization where username = @id))
 	begin
-		insert into [Organization](username) values (@id)
+		insert into [Organization] values (@id, @name, @description, @type, @phone, @website)
 	end
-
-	update Organization
+	else
+	begin
+		update Organization
 		set	description = @description,
 			name = @name,
 			[type] = @type,
 			[phone] = @phone,
 			website = @website
 		where username = @id
+	end
 end
 go
 
@@ -291,16 +293,18 @@ create proc setIndividual
 as begin
 	if (not exists (select * from Individual where username = @id))
 	begin
-		insert into [Individual](username) values (@id)
+		insert into [Individual] values (@id, @firstName, @midName, @lastName, @dob, @gender)
 	end
-
-	update Individual
+	else
+	begin
+		update Individual
 		set	firstName = @firstName,
 			midName = @midName,
 			lastName = @lastName,
 			DOB = @dob,
 			gender = @gender
 		where username = @id
+	end
 end
 go
 

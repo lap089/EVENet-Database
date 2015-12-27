@@ -234,7 +234,7 @@ begin
 	select  i.username, u.profilePicture, i.firstName as [Name] from [Individual] i, [User] u 
 	where i.lastName + i.midName + i.firstName  like '%' + @name + '%' and i.username = u.username
 	union
-	select o.username, u.coverPicture, o.name as [Name] from [Organization] o, [User] u 
+	select o.username, u.profilePicture, o.name as [Name] from [Organization] o, [User] u 
 	where u.username = o.username and o.name like '%' + @name + '%' or @name like '%' + o.name + '%' 
 end
 go
@@ -245,7 +245,6 @@ go
 
 
 
-select * from [Individual] i, [Individual] e
 
 ----test:
 --exec dbo.createRoot 'tqlap@apcs.vn','fsdfsdfsdf',null 
