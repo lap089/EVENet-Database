@@ -416,10 +416,11 @@ create proc createEvent
 	@title nvarchar(128),
 	@ticket int,
 	@location int,
-	@currentUser varchar(32)
+	@currentUser varchar(32),
+	@imageGallery varchar(max)
 as begin
-	insert into [Event](beginTime,endTime,description,thumbnail,title,ticket,location,username) values
-	(@beginTime, @endTime, @description,@thumbnail, @title,@ticket, @location, @currentUser)
+	insert into [Event](beginTime,endTime,description,thumbnail,title,ticket,location,username,imageGallery) values
+	(@beginTime, @endTime, @description,@thumbnail, @title,@ticket, @location, @currentUser, @imageGallery)
 end
 go
 
@@ -791,7 +792,7 @@ go
 create procedure setEvent
 @id int, @username nvarchar(32), @begintime datetime,
  @endtime datetime, @description nvarchar(1024),@thumbnail varchar(256) ,@title nvarchar(128), @ticket int,  
- @location int
+ @location int, @imageGallery varchar(max)
  as
  begin
 	if( dbo.isHost(@username,@id) = 0 and dbo.isAdmin(@username) =0)
@@ -799,8 +800,8 @@ create procedure setEvent
 	else
 	update [Event]
 	set beginTime = @begintime, endTime = @endtime,
-	 description = @description,title =@title, thumbnail = @thumbnail 
-	 , ticket = @ticket,location = @location
+	 description = @description,title =@title, thumbnail = @thumbnail
+	 , ticket = @ticket,location = @location, imageGallery = @imageGallery
 	where id = @id
  end
  go

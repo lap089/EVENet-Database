@@ -85,6 +85,7 @@ create table [Event] (
 	ticket int,
 	location int not null,
 	username varchar(32) not null,
+	imageGallery varchar(max),
 	publishDate datetime default getdate(),
 	primary key(id)
 )
@@ -191,13 +192,6 @@ ADD PRIMARY KEY (username,event)
 go
 
 
-create table [Photo] (
-	eventId int not null,
-	[order] int not null,
-	data varchar(256) not null,
-
-	primary key (eventId, [order])
-)
 
 create table [Comment] (
 	id int identity(1, 1),
@@ -295,10 +289,6 @@ references [User](username)
 alter table [UserEventAttendants]
 add constraint FK_UserEventAttendants_Event foreign key (event)
 references [Event](id)
-
-alter table [Photo]
-add constraint FK_Photo_Event
-foreign key (eventId) references [Event](id)
 
 alter table [Organization]
 add constraint FK_Organization_Type
