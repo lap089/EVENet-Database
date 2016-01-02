@@ -1,4 +1,4 @@
-/* Authors: Khoi Hoang, Quoc-Lap Trieu */
+/* Authors: Khoi Khoi, Quoc-Lap Trieu */
 /* ADD TABLES */
 
 create database EVENet
@@ -13,7 +13,6 @@ create table [User] (
 	coverPicture varchar(256),
 	registerDate datetime default getdate() not null,
 	userType int not null,
-
 )
 
 
