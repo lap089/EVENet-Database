@@ -466,6 +466,28 @@ end
 go
 
 
+-- Register for an event (must not be the author): 
+create proc registerEventTicket
+	@eventId int,
+	@username varchar(32) 
+as begin
+	insert into [UserEventAttendants] values
+	(@username, @eventId, 1)
+end
+go
+
+
+
+-- Check whether an user registered
+create function isRegistered(@username varchar(32), @eventId int)
+	returns bit
+as begin
+	if exists (select * from [UserEventAttendants] where username = @username and event = @eventId) begin
+		return 1
+	end
+	return 0
+end
+go 
 
 /* 2.12.2 disinvite an user */
 create proc disinvite 
@@ -865,7 +887,7 @@ go
 
 ​
 -- Get number of ticket of an event
-create function getNumberOfTicket(@eventId int)
+create function getNumOfTicket(@eventId int)
 returns int
 as begin
 	declare @result int
@@ -929,6 +951,7 @@ go
 
 --drop procedure dbo.getEventFromName
 --drop procedure dbo.getUserFromName
+
 
 
 
